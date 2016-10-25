@@ -35,58 +35,46 @@
     <a href="#pageone" id="enter" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-icon-check ui-btn-icon-left">确定</a>
   </div>
   <div data-role="main">
-    <div data-role="collapsible-set">
-      <div data-role="collapsible">
-        <h1>头部</h1>
-        <div data-role="collapsible">
-          <h1>鼻</h1>
-          <ul data-role="listview"> 
-            <li data-icon="false">鼻塞</li>
-            <li data-icon="false">流鼻涕</li>
-            <li data-icon="false">鼻出血</li>
-            <li data-icon="false">流鼻血</li>
-            <li data-icon="false">嗅觉障碍</li>
-            <li data-icon="false">鼻痛</li>
-            <li data-icon="false">鼻腔有异物</li>
-            <li data-icon="false">鼻子红肿</li>
-          </ul>
-        </div>
+    <div class="part" data-role="collapsible-set">
+      <div id="头部" data-role="collapsible">
+        <h3>头部</h3>
+        <ul data-role='listview'></ul>
       </div>
-      <div data-role="collapsible">
+      <div id="颈部" data-role="collapsible">
         <h3>颈部</h3>
-        <p>我是可折叠的内容。</p>
+        <ul data-role='listview'></ul>
       </div>
-      <div data-role="collapsible">
+      <div id="胸部" data-role="collapsible">
         <h3>胸部</h3>
-        <p>我是可折叠的内容。</p>
+        <ul data-role='listview'></ul>
       </div>
-      <div data-role="collapsible">
+      <div id="背部" data-role="collapsible">
         <h3>背部</h3>
-        <p>我是可折叠的内容。</p>
+        <ul data-role='listview'></ul>
       </div>
-      <div data-role="collapsible">
+      <div id="上肢" data-role="collapsible">
         <h3>上肢</h3>
-        <p>我是可折叠的内容。</p>
+        <ul data-role='listview'></ul>
       </div>
-      <div data-role="collapsible">
+      <div id="腹部" data-role="collapsible">
         <h3>腹部</h3>
-        <p>我是可折叠的内容。</p>
+        <ul data-role='listview'></ul>
       </div>
-      <div data-role="collapsible">
+      <div id="腰部" data-role="collapsible">
         <h3>腰部</h3>
-        <p>我是可折叠的内容。</p>
+        <ul data-role='listview'></ul>
       </div>
-      <div data-role="collapsible">
+      <div id="盆骨" data-role="collapsible">
         <h3>盆骨</h3>
-        <p>我是可折叠的内容。</p>
+        <ul data-role='listview'></ul>
       </div>
-      <div data-role="collapsible">
+      <div id="下肢" data-role="collapsible">
         <h3>下肢</h3>
-        <p>我是可折叠的内容。</p>
+        <ul data-role='listview'></ul>
       </div>
-      <div data-role="collapsible">
+      <div id="其他" data-role="collapsible">
         <h3>其他</h3>
-        <p>我是可折叠的内容。</p>
+        <ul data-role='listview'></ul>
       </div>
     </div>
   </div>
@@ -94,20 +82,7 @@
 	</body>
 	<script>
       $(document).on("pageinit","#pagetwo",function(){
-        $("li").on("tap",function(){
-          //选中效果，背景变黑
-          if(!$(this).hasClass("choose")){
-           $(this).css("background-color","#373737");
-           $(this).css("color","#FFFFFF");
-           $(this).addClass("choose");
-         }else{
-           //取消选中，背景变白
-           $(this).css("background-color","#FFFFFF");
-           $(this).css("color","#333333");
-           $(this).removeClass("choose");
-         }
-        });
-        //添加到症状列表
+        //添加到已选择的症状列表
         $("#enter").on("tap",function(){
           var $newli = $("#pagetwo .choose").clone();
           $newli.css("background-color","#FFFFFF");
@@ -115,9 +90,38 @@
           $("#symptom").empty().append($newli);
         });                
       });
-      //跳转到推荐医生列表界面
+      function changeColor(){
+      	//选中效果，背景变黑
+        if(!$(this).hasClass("choose")){
+         $(this).css("background-color","#373737");
+         $(this).css("color","#FFFFFF");
+         $(this).addClass("choose");
+       }else{
+         //取消选中，背景变白
+         $(this).css("background-color","#FFFFFF");
+         $(this).css("color","#333333");
+         $(this).removeClass("choose");
+       }
+      }
+      //为所有折叠块添加展开事件，动态添加症状
+      $(".part div").on("collapsibleexpand",function(){
+        if($(this).hasClass("opened")){
+        	return false;
+        }
+      	$link = "/getSymptoms?" + $(this).attr("id");
+      	$(this).addClass("opened");
+      	var $ul = $(this).find("ul");
+      	$.getJSON($link,function(data){
+    		$.each(data, function(i, item){
+      			$ul.append("<li data-icon='false'>"+item+"</li>");
+      			$ul.listview("refresh");
+    		});
+  		});
+  		$ul.delegate('li','tap',changeColor);
+      });
+      //跳转到问题列表页面
       function diagnose(){
-      	var $link = "recommandJsp?symptoms=";
+      	var $link = "questionListJsp?symptoms=";
       	$("#symptom li").each(function(){
       		$link += $(this).text()+",";
       	});
