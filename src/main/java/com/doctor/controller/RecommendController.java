@@ -14,7 +14,6 @@ import com.doctor.pojo.Question;
 
 @Controller
 public class RecommendController {
-
 	/**
 	 * 
 	 * @return 症状选择页面
@@ -121,4 +120,5 @@ public class RecommendController {
 		model.addAttribute("doctors", list);
 		return "doctor";
 	}
+	
 }
