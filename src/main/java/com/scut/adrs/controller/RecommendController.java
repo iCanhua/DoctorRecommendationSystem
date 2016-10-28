@@ -1,19 +1,24 @@
-package com.doctor.controller;
+package com.scut.adrs.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.doctor.pojo.Doctor;
-import com.doctor.pojo.Question;
+import com.scut.adrs.analyticallayer.dto.Question;
+import com.scut.adrs.model.Doctor;
+import com.scut.adrs.recommendation.service.TestService;
 
 @Controller
 public class RecommendController {
+	@Autowired
+	TestService testService;
+
 	/**
 	 * 
 	 * @return 症状选择页面
@@ -112,13 +117,9 @@ public class RecommendController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(symptoms);
-		List<Doctor> list = new ArrayList<Doctor>();
-		list.add(new Doctor("于丹青", "主治医生", "外科 神经外科", "心血管疾病，冠心病"));
-		list.add(new Doctor("于丹青", "主治医生", "外科 神经外科", "心血管疾病，冠心病"));
-		list.add(new Doctor("于丹青", "主治医生", "外科 神经外科", "心血管疾病，冠心病"));
+		List<Doctor> list = testService.getDoctor();
 		model.addAttribute("doctors", list);
 		return "doctor";
 	}
-	
+
 }
