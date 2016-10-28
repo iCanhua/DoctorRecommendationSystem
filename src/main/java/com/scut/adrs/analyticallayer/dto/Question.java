@@ -1,4 +1,4 @@
-package com.doctor.pojo;
+package com.scut.adrs.analyticallayer.dto;
 
 import java.util.List;
 
