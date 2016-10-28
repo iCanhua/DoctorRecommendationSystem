@@ -91,6 +91,13 @@
 		<version>${servlet-api.version}</version>
 		<scope>provided</scope>
 	</dependency>
+	<!-- Jena框架  -->
+	<dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>apache-jena-libs</artifactId>
+            <type>pom</type>
+            <version>3.1.0</version>
+        </dependency>
   </dependencies>
   <build>
 	<!-- 配置插件 -->
