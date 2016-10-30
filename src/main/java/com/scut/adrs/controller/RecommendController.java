@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scut.adrs.analyticallayer.dto.Question;
-import com.scut.adrs.model.Doctor;
+import com.scut.adrs.domain.Doctor;
 import com.scut.adrs.recommendation.service.TestService;
 
 @Controller

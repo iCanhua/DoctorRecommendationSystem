@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.scut.adrs.model.Doctor;
+import com.scut.adrs.domain.Doctor;
 
 @Service
 public class TestService {
