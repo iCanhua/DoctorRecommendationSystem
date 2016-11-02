@@ -36,44 +36,40 @@
   </div>
   <div data-role="main">
     <div class="part" data-role="collapsible-set">
-      <div id="头部" data-role="collapsible">
-        <h3>头部</h3>
+      <div id="全身" data-role="collapsible">
+        <h3>全身</h3>
         <ul data-role='listview'></ul>
       </div>
-      <div id="颈部" data-role="collapsible">
-        <h3>颈部</h3>
+      <div id="四肢" data-role="collapsible">
+        <h3>四肢</h3>
+        <ul data-role='listview'></ul>
+      </div>
+      <div id="头部" data-role="collapsible">
+        <h3>头部</h3>
         <ul data-role='listview'></ul>
       </div>
       <div id="胸部" data-role="collapsible">
         <h3>胸部</h3>
         <ul data-role='listview'></ul>
       </div>
-      <div id="背部" data-role="collapsible">
-        <h3>背部</h3>
-        <ul data-role='listview'></ul>
-      </div>
-      <div id="上肢" data-role="collapsible">
-        <h3>上肢</h3>
+      <div id="腰部" data-role="collapsible">
+        <h3>腰部</h3>
         <ul data-role='listview'></ul>
       </div>
       <div id="腹部" data-role="collapsible">
         <h3>腹部</h3>
         <ul data-role='listview'></ul>
       </div>
-      <div id="腰部" data-role="collapsible">
-        <h3>腰部</h3>
+      <div id="颈部" data-role="collapsible">
+        <h3>颈部</h3>
         <ul data-role='listview'></ul>
       </div>
-      <div id="盆骨" data-role="collapsible">
-        <h3>盆骨</h3>
+      <div id="排泄部位" data-role="collapsible">
+        <h3>排泄部位</h3>
         <ul data-role='listview'></ul>
       </div>
-      <div id="下肢" data-role="collapsible">
-        <h3>下肢</h3>
-        <ul data-role='listview'></ul>
-      </div>
-      <div id="其他" data-role="collapsible">
-        <h3>其他</h3>
+      <div id="生殖部位" data-role="collapsible">
+        <h3>生殖部位</h3>
         <ul data-role='listview'></ul>
       </div>
     </div>
@@ -108,7 +104,7 @@
         if($(this).hasClass("opened")){
         	return false;
         }
-      	$link = "/getSymptoms?" + $(this).attr("id");
+      	$link = "/getSymptoms?position=" + $(this).attr("id");
       	$(this).addClass("opened");
       	var $ul = $(this).find("ul");
       	$.getJSON($link,function(data){

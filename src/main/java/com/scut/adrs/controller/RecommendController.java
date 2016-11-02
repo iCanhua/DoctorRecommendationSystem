@@ -1,6 +1,5 @@
 package com.scut.adrs.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scut.adrs.analyticallayer.dto.Question;
+import com.scut.adrs.analyticallayer.service.SymptomService;
 import com.scut.adrs.domain.Doctor;
 import com.scut.adrs.recommendation.service.TestService;
+import com.scut.adrs.util.EncodingConvert;
 
 @Controller
 public class RecommendController {
+
+	@Autowired
+	SymptomService symptomService;
+
 	@Autowired
 	TestService testService;
 
@@ -34,16 +39,10 @@ public class RecommendController {
 	 */
 	@RequestMapping("/getSymptoms")
 	@ResponseBody
-	public List<String> getSymptoms() {
-		List<String> symptoms = new ArrayList<String>();
-		symptoms.add("鼻塞");
-		symptoms.add("流鼻涕");
-		symptoms.add("鼻出血");
-		symptoms.add("流鼻血");
-		symptoms.add("嗅觉障碍");
-		symptoms.add("鼻痛");
-		symptoms.add("鼻腔有异物");
-		symptoms.add("鼻子红肿");
+	public List<String> getSymptoms(String position) {
+		position = EncodingConvert.convert(position);
+		List<String> symptoms = symptomService.getSymptomList("按" + position
+				+ "分");
 		return symptoms;
 	}
 
@@ -57,17 +56,7 @@ public class RecommendController {
 	 */
 	@RequestMapping("/questionListJsp")
 	public String questionListJsp(String symptoms, Model model) {
-		try {
-			if (symptoms != null) {
-				// get方法传递中文参数转码
-				symptoms = new String(symptoms.getBytes("iso-8859-1"), "utf-8");
-			} else {
-				symptoms = "";
-			}
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		symptoms = EncodingConvert.convert(symptoms);
 		List<Question> list = new ArrayList<Question>();
 		List<String> choices1 = new ArrayList<String>();
 		choices1.add("呼吸困难");
@@ -106,17 +95,7 @@ public class RecommendController {
 	 */
 	@RequestMapping("/recommendJsp")
 	public String recommendJsp(String symptoms, Model model) {
-		try {
-			if (symptoms != null) {
-				// get方法传递中文参数转码
-				symptoms = new String(symptoms.getBytes("iso-8859-1"), "utf-8");
-			} else {
-				symptoms = "";
-			}
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		symptoms = EncodingConvert.convert(symptoms);
 		List<Doctor> list = testService.getDoctor();
 		model.addAttribute("doctors", list);
 		return "doctor";
