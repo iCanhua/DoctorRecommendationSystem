@@ -12,20 +12,21 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class SymptomDao {
 	@Autowired
-	OntModel myOntModel;
+	OntModel ontModel;
 
 	static String uri = OntModelFactory.uri;
 
 	public List<String> getSymptomByPosition(String position) {
-		System.out.println(position);
-		OntClass positionOntClass = myOntModel.getOntClass(uri + position);
+		OntClass positionOntClass = ontModel.getOntClass(uri + position);
 		ArrayList<String> list = new ArrayList<String>();
 		if (positionOntClass == null) {
 			return list;
 		}
 		for (Iterator<OntClass> i = positionOntClass.listSubClasses(); i
 				.hasNext();) {
-			list.add(i.next().getLocalName());
+			OntClass clazz = i.next();
+			if (!clazz.getLocalName().equals("Nothing"))
+				list.add(clazz.getLocalName());
 		}
 		return list;
 	}
