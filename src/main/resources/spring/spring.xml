@@ -7,8 +7,9 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
-	<context:component-scan base-package="com.scut.adrs" />
+	<context:annotation-config />
+	<context:component-scan base-package="com.scut.adrs.recommendation,com.scut.adrs.analyticallayer,,com.scut.adrs.util" />
 	<!--从doctor.owl中提取model-->  
-    <bean name="myOntModel" class="com.scut.adrs.analyticallayer.dao.OntModelFactory" factory-method="getOntModel"></bean> 
+    <bean name="model" class="com.scut.adrs.util.ontDaoUtils" factory-method="getModel"></bean> 
     
 </beans>
