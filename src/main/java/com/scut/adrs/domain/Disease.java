@@ -19,7 +19,23 @@ public class Disease {
 		this.diseaseName = diseaseName;
 	}
 	
+	//重写该方法，便于加入相同的症状
+	public boolean equals(Object obj){
+		if(!(obj instanceof Disease)){
+			return false;
+		}else{
+			Disease sp=(Disease)obj;
+			if(sp.getDiseaseName().equals(this.getDiseaseName())){
+				return true;
+			}
+		}
+		return false;
+	}
 	
+	public int hashCode(){  
+	    return this.diseaseName.hashCode();
+	}
+
 	
 
 }

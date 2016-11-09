@@ -1,15 +1,15 @@
 package com.scut.adrs.recommendation.dao;
 
 import org.apache.jena.ontology.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Symptom;
-
+import com.scut.adrs.recommendation.exception.UnExistRdfException;
 import com.scut.adrs.util.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -76,27 +76,33 @@ public class OntParserDao {
      * @param model 本体模型
      * @param rdfStr 被约束类
      */
-    public static List<Restriction> parseRestriction(OntModel model,String rdfStr){
+    public static List<Restriction> parseRestriction (OntModel model,String rdfStr) throws UnExistRdfException {
+    	if(rdfStr==null||model==null){
+    		return null;
+    	}
     	List<Restriction> reSet=new ArrayList<Restriction>();
         OntClass ontClass=model.getOntClass(rdfStr);
-        System.out.println("被约束类："+ontClass.toString());
+        if(ontClass==null){
+        	throw new UnExistRdfException(rdfStr+"    无法找到该本体");
+ 
+        }
         Iterator it =ontClass.listSuperClasses(true);
         while (it.hasNext()){
             OntClass sub=(OntClass)it.next();
             if(!sub.isRestriction()){
-                System.out.println("命名类："+sub.getURI());
+                //System.out.println("命名类："+sub.getURI());
             }else {
                 Restriction re=sub.asRestriction();
                 if(re.isSomeValuesFromRestriction()){
                 	reSet.add(re);
-                    String aa=re.asSomeValuesFromRestriction().getSomeValuesFrom().toString();
-                    System.out.println("约束："+re.asSomeValuesFromRestriction().getSubClass().toString()+re.getOnProperty()+" SOME "+aa);
+                    //String aa=re.asSomeValuesFromRestriction().getSomeValuesFrom().toString();
+                    //System.out.println("约束："+re.asSomeValuesFromRestriction().getSubClass().toString()+re.getOnProperty()+" SOME "+aa);
                     
                 }
                 if(re.isAllValuesFromRestriction()){
                 	reSet.add(re);
-                    String bb=re.asAllValuesFromRestriction().getAllValuesFrom().toString();
-                    System.out.println("约束："+re.getOnProperty()+" ONLY "+bb);
+                    //String bb=re.asAllValuesFromRestriction().getAllValuesFrom().toString();
+                    //System.out.println("约束："+re.getOnProperty()+" ONLY "+bb);
                     
                 }
             }
@@ -115,12 +121,13 @@ public class OntParserDao {
 		while (i.hasNext()) {
 			Restriction r = i.next();
 			if (r.isSomeValuesFromRestriction()) {
-				if (r.asSomeValuesFromRestriction().getSomeValuesFrom().equals(values)) {
+				if (r.asSomeValuesFromRestriction().getSomeValuesFrom().getURI().equals(values)) {
+					//System.out.println("这里捕捉到一个约束与疾病"+values+"同名");
 					restrictionSet.add(r);
 				}
 			}
 			if (r.isAllValuesFromRestriction()) {
-				if (r.asAllValuesFromRestriction().getAllValuesFrom().equals(values)) {
+				if (r.asAllValuesFromRestriction().getAllValuesFrom().getURI().equals(values)) {
 					restrictionSet.add(r);
 				}
 			}
@@ -129,7 +136,7 @@ public class OntParserDao {
 	}
     
     //把相关约束的症状提取出来，放到集合中
-    public Set<Symptom> getRelativeSymptom(Symptom symptom){
+    public Set<Symptom> getRelativeSymptom(Symptom symptom) throws UnExistRdfException{
     	
     	List<Restriction> reList =parseRestriction(model,symptom.getSymptomName());
     	Set<Symptom> interSymptomSet=new HashSet<Symptom>();
@@ -144,7 +151,7 @@ public class OntParserDao {
     	return interSymptomSet;
     }
     
-    public Set<Disease> getRelativeDiseaseBySymptom(Symptom symptom){
+    public Set<Disease> getRelativeDiseaseBySymptom(Symptom symptom) throws UnExistRdfException{
     	if(symptom==null) return null;
     	List<Restriction> reList =parseRestriction(model,symptom.getSymptomName());
     	Set<String> interDiseaseName=new HashSet<String>();
@@ -174,8 +181,8 @@ public class OntParserDao {
     	 for (Restriction re : reSet) {
              for (Iterator<OntClass> i = re.listSubClasses(true); i.hasNext();) {
                  OntClass ontClass = i.next();
-                 if (!ontClassSet.contains(ontClass))
-                     System.out.println(ontClass.getLocalName());
+                 //if (!ontClassSet.contains(ontClass))
+                     //System.out.println(ontClass.getLocalName());
                  ontClassSet.add(ontClass);
              }
          }
@@ -188,8 +195,10 @@ public class OntParserDao {
     }
     
     public Set<Symptom> getRelativeSymptomByDisease(String property,Disease disease){
+    	
     	//找到对应的所有约束
     	Set<Restriction> reSet=getRestriction(model, property, disease.getDiseaseName());
+    	//System.out.println("test1"+reSet.size()+disease.getDiseaseName());
     	//存放所有约束相关的子类的集合
     	Set<OntClass> ontClassSet = new HashSet<OntClass>();
     	//存放要构造成交互症状的集合
@@ -198,13 +207,15 @@ public class OntParserDao {
              for (Iterator<OntClass> i = re.listSubClasses(true); i.hasNext();) {
                  OntClass ontClass = i.next();
                  if (!ontClassSet.contains(ontClass))
-                     System.out.println(ontClass.getLocalName());
+                     //System.out.println(ontClass.getLocalName());
                  ontClassSet.add(ontClass);
              }
          }
     	 //开始构造交互症状
     	for(OntClass ontclass:ontClassSet){
     		interSymptom.add(new Symptom(ontclass.getURI()));
+    		//System.out.println("test2");
+    		//System.out.println("获得了一个症状"+ontclass.getURI());
     	}
     
     	return interSymptom;
@@ -220,7 +231,7 @@ public class OntParserDao {
             for (Iterator<OntClass> i = re.listSubClasses(true); i.hasNext();) {
                 OntClass ontClass = i.next();
                 if (!ontClassSet.contains(ontClass))
-                    System.out.println(ontClass.getLocalName());
+                    System.out.println("这里在打印病："+ontClass.getLocalName());
                 ontClassSet.add(ontClass);
             }
         }

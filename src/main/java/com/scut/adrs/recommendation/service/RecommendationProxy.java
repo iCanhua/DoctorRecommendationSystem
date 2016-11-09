@@ -2,10 +2,13 @@ package com.scut.adrs.recommendation.service;
 
 import java.util.Iterator;
 
+import com.scut.adrs.domain.Disease;
+import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.InterQuestion;
 import com.scut.adrs.recommendation.PreDiagnosis;
+import com.scut.adrs.recommendation.exception.UnExistRdfException;
 import com.scut.adrs.recommendation.imp.PreDiagnosisImp;
 import com.scut.adrs.util.ontDaoUtils;
 
@@ -28,8 +31,8 @@ public class RecommendationProxy implements PreDiagnosis{
 	}
 
 	@Override
-	public InterQuestion prediagnosis(Patient patient) {
-		this.preDiagnose.prediagnosis(patient);
+	public InterQuestion prediagnosis(Patient patient) throws UnExistRdfException {
+		//this.preDiagnose.prediagnosis(patient);
 		
 		return this.preDiagnose.prediagnosis(patient);
 	}
@@ -42,14 +45,14 @@ public class RecommendationProxy implements PreDiagnosis{
 		return pt;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnExistRdfException {
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("spring/spring*.xml");
 		PreDiagnosis pd=ctx.getBean(PreDiagnosisImp.class);
 		Patient patient=new Patient();
 		patient.addSymptom(ontDaoUtils.getNS()+"发热");
-		pd.prediagnosis(patient);
-		for(Symptom sp:patient.getHasSymptoms()){
-			System.out.println(sp.getSymptomName());
+		InterQuestion question=pd.prediagnosis(patient);
+		for(Disease py:question.getHasMedicalHistory()){
+			System.out.println("病史："+py.getDiseaseName());
 		}
 		
 	}
