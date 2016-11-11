@@ -1,18 +1,17 @@
 package com.scut.adrs.recommendation;
-
 import java.util.List;
 import java.util.Set;
-
 import org.apache.jena.ontology.Restriction;
-
 import com.scut.adrs.domain.BodySigns;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Symptom;
-
+/**
+ * 和病人交互会话的对象类
+ * @author FAN
+ *
+ */
 public class InterQuestion {
-	
-	
 	private Set<Symptom> hasSymptoms;//是否拥有症状
 	private Set<BodySigns> hasBodySigns;//是否拥有体征
 	private Set<Pathogeny> hasPathogeny;//是否拥有病因
@@ -41,9 +40,4 @@ public class InterQuestion {
 	public void setHasMedicalHistory(Set<Disease> hasMedicalHistory) {
 		this.hasMedicalHistory = hasMedicalHistory;
 	}
-
-	
-	
-	
-
 }
