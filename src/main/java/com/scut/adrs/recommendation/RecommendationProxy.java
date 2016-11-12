@@ -3,6 +3,7 @@ package com.scut.adrs.recommendation;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.scut.adrs.domain.BodySigns;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
@@ -49,8 +50,8 @@ public class RecommendationProxy implements PreDiagnosis{
 		Patient patient=new Patient();
 		patient.addSymptom(ontDaoUtils.getNS()+"局部疼痛");
 		InterQuestion question=pd.prediagnosis(patient);
-		for(Symptom sy:question.getHasSymptoms()){
-			System.out.println("症状："+sy.getSymptomName());
+		for(BodySigns bs:question.getHasBodySigns()){
+			System.out.println("体征："+bs.getBodySignName());
 		}
 		Set<Disease> a =patient.getDiseaseAndIndex().keySet();
 		for (Disease py:a) {

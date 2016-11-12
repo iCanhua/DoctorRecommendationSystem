@@ -99,26 +99,36 @@ public class OntParserDao{
      * 构造约束
      * 通过指定属性和值来获得约束集合；
      */
-    public Set<Restriction> getRestriction( String property, String values) {
+    public Set<Restriction> getRestriction( String property, String valuesFrom) {
 		Set<Restriction> restrictionSet = new HashSet<Restriction>();
 		OntProperty p = model.getOntProperty(NS + property);
 		Iterator<Restriction> i = p.listReferringRestrictions();
 		while (i.hasNext()) {
 			Restriction r = i.next();
 			if (r.isSomeValuesFromRestriction()) {
-				if (r.asSomeValuesFromRestriction().getSomeValuesFrom().getURI().equals(values)) {
+				if (r.asSomeValuesFromRestriction().getSomeValuesFrom().getURI().equals(valuesFrom)) {
 					//System.out.println("这里捕捉到一个约束与疾病"+values+"同名");
 					restrictionSet.add(r);
 				}
 			}
 			if (r.isAllValuesFromRestriction()) {
-				if (r.asAllValuesFromRestriction().getAllValuesFrom().getURI().equals(values)) {
+				if (r.asAllValuesFromRestriction().getAllValuesFrom().getURI().equals(valuesFrom)) {
 					restrictionSet.add(r);
 				}
 			}
 		}
 		return restrictionSet;
 	}
+    
+    public Set<OntClass> getSubClass(Restriction re){
+    	//存放所有约束相关的子类的集合
+    	Set<OntClass> ontClassSet = new HashSet<OntClass>();
+        for (Iterator<OntClass> i = re.listSubClasses(true); i.hasNext();) {
+            OntClass ontClass = i.next();
+            ontClassSet.add(ontClass);
+        }
+    	return ontClassSet;
+    }
 
 
 
