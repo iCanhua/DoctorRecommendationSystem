@@ -73,15 +73,7 @@ public class OntKnowledgeEngine implements PreDiaKnowledgeEngine{
     	 //开始构造交互症状
     	String symptomURI=NS+"症状";
     	for(OntClass ontclass:ontClassSet){
-    		boolean finded=false;
-    		ExtendedIterator<OntClass> iterator=ontclass.listSuperClasses(false);
-    		while(iterator.hasNext()){
-    			OntClass superClass=(OntClass) iterator.next();
-    			if(symptomURI.equals(superClass.getURI())){
-    				finded=true;
-    			}
-    		}
-    		if(finded==true){
+    		if(isSuperClass(symptomURI, ontclass)){
     			interSymptom.add(new Symptom(ontclass.getURI()));
     		}
     	}
@@ -102,17 +94,19 @@ public class OntKnowledgeEngine implements PreDiaKnowledgeEngine{
     		 ontClassSet.addAll(ontParserDao.getSubClass(re));
          }
     	 //开始构造交互病因
+    	 String pathgenyURI=NS+"病因";
     	for(OntClass ontclass:ontClassSet){
-    		interPathogeny.add(new Pathogeny(ontclass.getURI()));
+    		if(isSuperClass(pathgenyURI, ontclass)){
+    			interPathogeny.add(new Pathogeny(ontclass.getURI()));
+    		}
     	}
-    	//这里由问题有待解决
     	return interPathogeny;
 	}
 
 	@Override
 	public Set<Disease> getRelativeDiseaseByDisease(Disease disease) {
 		//引发
-    	String property="引发";
+    	String property="导致";
     	//找到对应的所有约束
     	Set<Restriction> reSet=ontParserDao.getRestriction(property, disease.getDiseaseName());
     	//存放所有约束相关的子类的集合
@@ -124,8 +118,11 @@ public class OntKnowledgeEngine implements PreDiaKnowledgeEngine{
             
         }
     	//开始构造交互疾病
+    	String diseaseURI=NS+"疾病及综合症";
     	for(OntClass ontclass:ontClassSet){
-    		interDisease.add(new Disease(ontclass.getURI()));
+    		if(isSuperClass(diseaseURI, ontclass)){
+    			interDisease.add(new Disease(ontclass.getURI()));
+    		}
     	}
     	return interDisease;
 	}
@@ -160,8 +157,21 @@ public class OntKnowledgeEngine implements PreDiaKnowledgeEngine{
 
 		return interBodySigns;
 	}
-	
-
-	
-
+	/**
+	 * 抽取共同部分代码，判断某个本体是否为superURI的之类
+	 * @param superRdf
+	 * @param ontClass
+	 * @return
+	 */
+	private boolean isSuperClass(String superURI,OntClass ontClass){
+		boolean finded=false;
+		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
+		while(iterator.hasNext()){
+			OntClass superClass=(OntClass) iterator.next();
+			if(superURI.equals(superClass.getURI())){
+				finded=true;
+			}
+		}
+		return finded;
+	}
 }
