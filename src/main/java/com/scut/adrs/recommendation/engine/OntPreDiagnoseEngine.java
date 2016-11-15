@@ -1,4 +1,4 @@
-package com.scut.adrs.recommendation.service.imp;
+package com.scut.adrs.recommendation.engine;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,12 +16,12 @@ import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.dao.OntParserDao;
-import com.scut.adrs.recommendation.exception.UnExistRdfException;
+import com.scut.adrs.recommendation.exception.UnExistURIException;
 import com.scut.adrs.recommendation.service.PreDiaKnowledgeEngine;
 import com.scut.adrs.util.ontDaoUtils;
 
 @Service
-public class OntKnowledgeEngine implements PreDiaKnowledgeEngine{
+public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
 
 	static String NS=ontDaoUtils.getNS();
 	@Autowired
@@ -37,8 +37,14 @@ public class OntKnowledgeEngine implements PreDiaKnowledgeEngine{
 	/**
 	 * 根据症状去获取疾病的算法
 	 */
+	/**
+	 * 根据症状获取该症状相关的疾病
+	 * @param symptom
+	 * @return 疾病集合
+	 * @throws UnExistURIException
+	 */
 	@Override
-	public Set<Disease> getRelativeDiseaseBySymptom(Symptom symptom) throws UnExistRdfException {
+	public Set<Disease> getRelativeDiseaseBySymptom(Symptom symptom) throws UnExistURIException {
 		if(symptom==null) return null;
     	List<Restriction> reList =ontParserDao.parseRestriction(symptom.getSymptomName());
     	Set<String> interDiseaseName=new HashSet<String>();
@@ -57,7 +63,11 @@ public class OntKnowledgeEngine implements PreDiaKnowledgeEngine{
     	return interDisease;
 
 	}
-
+	/**
+	 * 根据疾病获取相关的症状
+	 * @param disease
+	 * @return 症状集
+	 */
 	@Override
 	public Set<Symptom> getRelativeSymptomByDisease(Disease disease) {
 		String property="是表现";
@@ -79,7 +89,11 @@ public class OntKnowledgeEngine implements PreDiaKnowledgeEngine{
     	}
     	return interSymptom;
 	}
-
+	/**
+	 * 根据疾病获取相关的病因
+	 * @param disease
+	 * @return 病因集
+	 */
 	@Override
 	public Set<Pathogeny> getRelativePathogenyByDisease(Disease disease) {
 		//定义算法属性
@@ -102,7 +116,11 @@ public class OntKnowledgeEngine implements PreDiaKnowledgeEngine{
     	}
     	return interPathogeny;
 	}
-
+	/**
+	 * 根据症状获取相关的疾病（引发，导致）
+	 * @param disease
+	 * @return 疾病集
+	 */
 	@Override
 	public Set<Disease> getRelativeDiseaseByDisease(Disease disease) {
 		//引发
@@ -126,7 +144,11 @@ public class OntKnowledgeEngine implements PreDiaKnowledgeEngine{
     	}
     	return interDisease;
 	}
-
+	/**
+	 * 根据疾病获取相关的体征
+	 * @param disease
+	 * @return 体征集
+	 */
 	@Override
 	public Set<BodySigns> getRelativeBodySignsByDisease(Disease disease) {
 		String property="是表现";

@@ -15,7 +15,7 @@ import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.InterQuestion;
 import com.scut.adrs.recommendation.PreDiagnosis;
 import com.scut.adrs.recommendation.dao.OntParserDao;
-import com.scut.adrs.recommendation.exception.UnExistRdfException;
+import com.scut.adrs.recommendation.exception.UnExistURIException;
 import com.scut.adrs.recommendation.service.PreDiaKnowledgeEngine;
 
 @Service
@@ -32,7 +32,7 @@ public class PreDiagnosisImp implements PreDiagnosis {
 	 * 预诊断，根据病人的症状信息去构建和病人交互的问题对象！
 	 */
 	@Override
-	public InterQuestion prediagnosis(Patient patient) throws UnExistRdfException  {
+	public InterQuestion prediagnosis(Patient patient) throws UnExistURIException  {
 		
 		InterQuestion interQuestion=new InterQuestion();
 		
@@ -73,8 +73,6 @@ public class PreDiagnosisImp implements PreDiagnosis {
 			interMedicalHistory.addAll(knowledgeEngine.getRelativeDiseaseByDisease( disease));
 		}
 		interQuestion.setHasMedicalHistory(interMedicalHistory);
-		
-
 		return interQuestion;
 	}
 

@@ -8,7 +8,7 @@ import com.scut.adrs.domain.BodySigns;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Symptom;
-import com.scut.adrs.recommendation.exception.UnExistRdfException;
+import com.scut.adrs.recommendation.exception.UnExistURIException;
 import com.scut.adrs.recommendation.service.PreDiaKnowledgeEngine;
 import com.scut.adrs.util.*;
 
@@ -69,14 +69,14 @@ public class OntParserDao{
      * @param rdfStr 被约束类
      */
     
-    public  List<Restriction> parseRestriction (String rdfStr) throws UnExistRdfException {
+    public  List<Restriction> parseRestriction (String rdfStr) throws UnExistURIException {
     	if(rdfStr==null||model==null){
     		return null;
     	}
     	List<Restriction> reSet=new ArrayList<Restriction>();
         OntClass ontClass=model.getOntClass(rdfStr);
         if(ontClass==null){
-        	throw new UnExistRdfException(rdfStr+"    无法找到该本体");
+        	throw new UnExistURIException(rdfStr+"    无法找到该本体");
         }
         Iterator it =ontClass.listSuperClasses(true);
         while (it.hasNext()){

@@ -8,7 +8,7 @@ import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
-import com.scut.adrs.recommendation.exception.UnExistRdfException;
+import com.scut.adrs.recommendation.exception.UnExistURIException;
 import com.scut.adrs.recommendation.service.imp.PreDiagnosisImp;
 import com.scut.adrs.util.ontDaoUtils;
 
@@ -19,7 +19,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RecommendationProxy implements PreDiagnosis{
+public class RecommendationProxy implements PreDiagnosis,Diagnose{
 	@Autowired
 	private PreDiagnosis preDiagnose;
 	
@@ -32,7 +32,7 @@ public class RecommendationProxy implements PreDiagnosis{
 	}
 
 	@Override
-	public InterQuestion prediagnosis(Patient patient) throws UnExistRdfException {
+	public InterQuestion prediagnosis(Patient patient) throws UnExistURIException {
 		//this.preDiagnose.prediagnosis(patient);
 		
 		return this.preDiagnose.prediagnosis(patient);
@@ -41,15 +41,15 @@ public class RecommendationProxy implements PreDiagnosis{
 	@Override
 	public Patient prediagnosis(Patient patient, InterQuestion question) {
 		Patient pt=this.prediagnosis(patient, question);
-		pt.setPreDiagnosis(true);
+		//pt.setPreDiagnosis(true);
 		return pt;
 	}
 	
-	public static void main(String[] args) throws UnExistRdfException {
+	public static void main(String[] args) throws UnExistURIException {
 		ApplicationContext ctx=new ClassPathXmlApplicationContext("spring/spring*.xml");
 		PreDiagnosis pd=ctx.getBean(PreDiagnosisImp.class);
 		Patient patient=new Patient();
-		patient.addSymptom(ontDaoUtils.getNS()+"心律失常");
+		patient.addSymptom(ontDaoUtils.getNS()+"呼吸困难");
 		InterQuestion question=pd.prediagnosis(patient);
 		for(BodySigns bs:question.getHasBodySigns()){
 			System.out.println("交互体征："+bs.getBodySignName());
@@ -69,6 +69,12 @@ public class RecommendationProxy implements PreDiagnosis{
 			System.out.println("概率"+patient.getDiseaseAndIndex().get(py));
 		}
 		
+	}
+
+	@Override
+	public Patient diagnose(Patient patient) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 
