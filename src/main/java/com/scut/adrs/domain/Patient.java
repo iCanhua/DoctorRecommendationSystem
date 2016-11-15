@@ -89,10 +89,5 @@ public class Patient {
 	public void addSymptom(String rdf){
 		hasSymptoms.add(new Symptom(rdf));
 	}
-	
-
-	
-
-	
 
 }
