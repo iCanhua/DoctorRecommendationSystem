@@ -6,6 +6,10 @@ public class Question {
 	String description;
 	List<String> choices;
 
+	public Question() {
+		super();
+	}
+
 	public Question(String description, List<String> choices) {
 		super();
 		this.description = description;
