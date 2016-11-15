@@ -17,7 +17,6 @@ public class SymptomDao {
 	static String uri = OntModelFactory.uri;
 
 	public List<String> getSymptomByPosition(String position) {
-		System.out.println(position);
 		OntClass positionOntClass = myOntModel.getOntClass(uri + position);
 		ArrayList<String> list = new ArrayList<String>();
 		if (positionOntClass == null) {
