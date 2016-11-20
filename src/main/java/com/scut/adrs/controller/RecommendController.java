@@ -18,7 +18,7 @@ import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.InterQuestion;
 import com.scut.adrs.recommendation.RecommendationProxy;
-import com.scut.adrs.recommendation.exception.UnExistRdfException;
+import com.scut.adrs.recommendation.exception.UnExistURIException;
 import com.scut.adrs.recommendation.service.TestService;
 import com.scut.adrs.util.EncodingConvert;
 import com.scut.adrs.util.QuestionUtil;
@@ -89,7 +89,7 @@ public class RecommendController {
 			questionList.addAll(QuestionUtil
 					.getMedicalHistoryQuestion(interQuestion
 							.getHasMedicalHistory()));
-		} catch (UnExistRdfException e) {
+		} catch (UnExistURIException e) {
 			e.printStackTrace();
 		}
 		model.addAttribute("questions", questionList);

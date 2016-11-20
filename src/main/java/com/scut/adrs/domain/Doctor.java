@@ -1,11 +1,15 @@
 package com.scut.adrs.domain;
 
 public class Doctor {
+	//用URI表示其唯一实例
 	public String name;
 	public String profession;
 	public String field;
 	public String expert;
-
+	
+	public Doctor(String doctorName){
+		name=doctorName;
+	}
 	public Doctor(String name, String profession, String field, String expert) {
 		super();
 		this.name = name;
