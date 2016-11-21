@@ -13,10 +13,10 @@ import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.InterQuestion;
-import com.scut.adrs.recommendation.PreDiagnosis;
 import com.scut.adrs.recommendation.dao.OntParserDao;
-import com.scut.adrs.recommendation.exception.UnExistRdfException;
+import com.scut.adrs.recommendation.exception.UnExistURIException;
 import com.scut.adrs.recommendation.service.PreDiaKnowledgeEngine;
+import com.scut.adrs.recommendation.service.PreDiagnosis;
 
 @Service
 public class PreDiagnosisImp implements PreDiagnosis {
@@ -32,7 +32,7 @@ public class PreDiagnosisImp implements PreDiagnosis {
 	 * 预诊断，根据病人的症状信息去构建和病人交互的问题对象！
 	 */
 	@Override
-	public InterQuestion prediagnosis(Patient patient) throws UnExistRdfException  {
+	public InterQuestion prediagnosis(Patient patient) throws UnExistURIException  {
 		
 		InterQuestion interQuestion=new InterQuestion();
 		
@@ -43,6 +43,7 @@ public class PreDiagnosisImp implements PreDiagnosis {
 		}
 		//初始化可能患有的疾病,并赋予初始值。
 		for (Disease disease:interDisease) {
+			//System.out.println("疾病为空吗？"+disease.getDiseaseName());
 			patient.addDisease(disease, 0.0f);
 			//System.out.println("病的名字："+disease.getDiseaseName());
 		}
@@ -73,8 +74,6 @@ public class PreDiagnosisImp implements PreDiagnosis {
 			interMedicalHistory.addAll(knowledgeEngine.getRelativeDiseaseByDisease( disease));
 		}
 		interQuestion.setHasMedicalHistory(interMedicalHistory);
-		
-
 		return interQuestion;
 	}
 

@@ -1,6 +1,7 @@
 package com.scut.adrs.recommendation.dao;
 
 import org.apache.jena.ontology.*;
+import org.apache.jena.util.iterator.ExtendedIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,7 @@ import com.scut.adrs.domain.BodySigns;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Symptom;
-import com.scut.adrs.recommendation.exception.UnExistRdfException;
+import com.scut.adrs.recommendation.exception.UnExistURIException;
 import com.scut.adrs.recommendation.service.PreDiaKnowledgeEngine;
 import com.scut.adrs.util.*;
 
@@ -23,7 +24,7 @@ import java.util.Set;
  */
 @Repository
 public class OntParserDao{
-    static String NS=ontDaoUtils.getNS();
+    public static String NS=ontDaoUtils.getNS();
     @Autowired
     private OntModel model;
     
@@ -33,8 +34,14 @@ public class OntParserDao{
 	public void setModel(OntModel model) {
 		this.model = model;
 	}
-
-    //打印本体
+	
+    public static String getNS() {
+		return NS;
+	}
+	public static void setNS(String nS) {
+		NS = nS;
+	}
+	//打印本体
     public static void classSum(OntModel model){
         int i=0;
         System.out.println("本体模型类大小："+model.listClasses().toSet().size());
@@ -69,14 +76,14 @@ public class OntParserDao{
      * @param rdfStr 被约束类
      */
     
-    public  List<Restriction> parseRestriction (String rdfStr) throws UnExistRdfException {
+    public  List<Restriction> parseRestriction (String rdfStr) throws UnExistURIException {
     	if(rdfStr==null||model==null){
     		return null;
     	}
     	List<Restriction> reSet=new ArrayList<Restriction>();
         OntClass ontClass=model.getOntClass(rdfStr);
         if(ontClass==null){
-        	throw new UnExistRdfException(rdfStr+"    无法找到该本体");
+        	throw new UnExistURIException(rdfStr+"    无法找到该本体");
         }
         Iterator it =ontClass.listSuperClasses(true);
         while (it.hasNext()){
@@ -130,6 +137,23 @@ public class OntParserDao{
     	return ontClassSet;
     }
 
+    /**
+	 * 抽取共同部分代码，判断某个本体是否为superURI的之类
+	 * @param superRdf
+	 * @param ontClass
+	 * @return
+	 */
+	public boolean isSuperClass(String superURI,OntClass ontClass){
+		boolean finded=false;
+		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
+		while(iterator.hasNext()){
+			OntClass superClass=(OntClass) iterator.next();
+			if(superURI.equals(superClass.getURI())){
+				finded=true;
+			}
+		}
+		return finded;
+	}
 
 
     
