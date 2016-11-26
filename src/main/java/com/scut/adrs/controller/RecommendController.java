@@ -3,7 +3,10 @@ package com.scut.adrs.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,25 +16,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scut.adrs.analyticallayer.dto.Question;
 import com.scut.adrs.analyticallayer.service.SymptomService;
+import com.scut.adrs.domain.BodySigns;
+import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Doctor;
+import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.InterQuestion;
 import com.scut.adrs.recommendation.RecommendationProxy;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
-import com.scut.adrs.recommendation.service.TestService;
+import com.scut.adrs.recommendation.service.DoctorService;
 import com.scut.adrs.util.EncodingConvert;
 import com.scut.adrs.util.QuestionUtil;
+import com.scut.adrs.util.SortUtil;
 import com.scut.adrs.util.ontDaoUtils;
 
 @Controller
 public class RecommendController {
 
+	static Patient patient;
+
 	@Autowired
 	SymptomService symptomService;
 
 	@Autowired
-	TestService testService;
+	DoctorService doctorService;
 
 	@Autowired
 	RecommendationProxy proxy;
@@ -67,7 +76,8 @@ public class RecommendController {
 	 * @return
 	 */
 	@RequestMapping("/questionListJsp")
-	public String questionListJsp(String symptoms, Model model) {
+	public String questionListJsp(String symptoms, HttpSession session,
+			Model model) {
 		String[] symptomsArray = EncodingConvert.convert(symptoms).split(",");
 		Set<Symptom> symptomSet = new HashSet<Symptom>();
 		String NS = ontDaoUtils.getNS();
@@ -94,6 +104,7 @@ public class RecommendController {
 		}
 		model.addAttribute("questions", questionList);
 		model.addAttribute("symptoms", EncodingConvert.convert(symptoms));
+		session.setAttribute("patient", patient);
 		return "question";
 	}
 
@@ -106,9 +117,68 @@ public class RecommendController {
 	 * @return 推荐医生列表界面
 	 */
 	@RequestMapping("/recommendJsp")
-	public String recommendJsp(String symptoms, Model model) {
-		List<Doctor> list = testService.getDoctor();
-		model.addAttribute("doctors", list);
+	public String recommendJsp(String symptoms, String bodySigns,
+			String pathogenys, String diseases, HttpSession session, Model model) {
+		String NS = ontDaoUtils.getNS();
+		patient = (Patient) session.getAttribute("patient");
+		if (patient == null) {
+			model.addAttribute("flag", false);
+			return "doctor";
+		} else {
+			model.addAttribute("flag", true);
+		}
+		patient.setPreDiagnosis(true);
+		if (symptoms != null && !symptoms.equals("")) {
+			Set<Symptom> symptomSet = new HashSet<Symptom>();
+			for (String symptom : symptoms.split(",")) {
+				symptomSet.add(new Symptom(NS + symptom));
+			}
+			patient.setHasSymptoms(symptomSet);
+		}
+		if (bodySigns != null && !bodySigns.equals("")) {
+			Set<BodySigns> bodySignSet = new HashSet<BodySigns>();
+			for (String bodySign : bodySigns.split(",")) {
+				bodySignSet.add(new BodySigns(NS + bodySign));
+			}
+			patient.setHasBodySigns(bodySignSet);
+		}
+		if (pathogenys != null && !pathogenys.equals("")) {
+			Set<Pathogeny> pathogenySet = new HashSet<Pathogeny>();
+			for (String pathogeny : pathogenys.split(",")) {
+				pathogenySet.add(new Pathogeny(NS + pathogeny));
+			}
+			patient.setHasPathogeny(pathogenySet);
+		}
+		if (diseases != null && !diseases.equals("")) {
+			Set<Disease> diseaseSet = new HashSet<Disease>();
+			for (String disease : diseases.split(",")) {
+				diseaseSet.add(new Disease(NS + disease));
+			}
+			patient.setHasMedicalHistory(diseaseSet);
+		}
+		proxy.diagnose(patient);
+		Map<Disease, Float> diseaseAndIndex = patient.getDiseaseAndIndex();
+		List<Map.Entry<Disease, Float>> diseaseList = new ArrayList<Map.Entry<Disease, Float>>(
+				diseaseAndIndex.entrySet());
+		SortUtil.disaseSort(diseaseList);
+		Map<Doctor, Float> result = proxy.doctorMatch(patient);
+		List<Map.Entry<Doctor, Float>> doctorList = new ArrayList<Map.Entry<Doctor, Float>>(
+				result.entrySet());
+		SortUtil.doctorSort(doctorList);
+		for (Map.Entry<Disease, Float> entry : diseaseList) {
+			String uri = entry.getKey().getDiseaseName();
+			String introduction = doctorService.getIntroduction(uri);
+			entry.getKey().setIntroduction(introduction);
+		}
+		for (Map.Entry<Doctor, Float> entry : doctorList) {
+			String uri = entry.getKey().getName();
+			String introduction = doctorService.getIntroduction(uri);
+			entry.getKey().setIntroduction(introduction.replace("\n", "<br/>"));
+		}
+
+		model.addAttribute("doctors", doctorList);
+		model.addAttribute("sicks", diseaseList);
+		session.removeAttribute("patient");
 		return "doctor";
 	}
 
