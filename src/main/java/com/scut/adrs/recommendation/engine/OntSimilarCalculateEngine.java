@@ -26,12 +26,12 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 
 	@Override
 	public Map<Doctor, Float> doctorMatch(Patient patient) {
-		Map<Doctor, Float> map=new HashMap<Doctor, Float>();
-		//System.out.println("找医生");
-		Doctor doctor1=new Doctor(OntParserDao.NS+"张斌");
-		Doctor doctor2=new Doctor(OntParserDao.NS+"张曹进");
-		Doctor doctor3=new Doctor(OntParserDao.NS+"熊卫萍");
-		Doctor doctor4=new Doctor(OntParserDao.NS+"罗丹东");
+		Map<Doctor, Float> map = new HashMap<Doctor, Float>();
+		// System.out.println("找医生");
+		Doctor doctor1 = new Doctor(OntParserDao.NS + "刘烈");
+		Doctor doctor2 = new Doctor(OntParserDao.NS + "张曹进");
+		Doctor doctor3 = new Doctor(OntParserDao.NS + "吴樱");
+		Doctor doctor4 = new Doctor(OntParserDao.NS + "吴书林");
 		map.put(doctor4, 23.02F);
 		map.put(doctor2, 53.02F);
 		map.put(doctor3, 2.02F);

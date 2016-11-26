@@ -3,6 +3,7 @@ package com.scut.adrs.analyticallayer.dto;
 import java.util.List;
 
 public class Question {
+	Integer type;
 	String description;
 	List<String> choices;
 
@@ -14,6 +15,14 @@ public class Question {
 		super();
 		this.description = description;
 		this.choices = choices;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	public String getDescription() {
