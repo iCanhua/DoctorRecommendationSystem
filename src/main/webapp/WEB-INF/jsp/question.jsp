@@ -23,28 +23,50 @@
 				  		<legend>${question.description}</legend>
 				  		<c:forEach items="${question.choices }" var="choice" varStatus="status2">
 				  			<label for="${status1.count }${choice }">${choice }</label>
-				  			<input type="checkbox" class="answer" id="${status1.count }${choice }" value="${choice }">
+				  			<input type="checkbox" class="answer" id="${status1.count }${choice }" value="${choice }" questionType="${question.type }">
 				  		</c:forEach>
 				  	</fieldset>		          
 	            </c:forEach>
-	          <a href="javascript:void(0)" class="ui-btn" data-ajax="false" onclick="recommend()">提交</a>
+	          <a href="javascript:void(0)" class="ui-btn" onclick="recommend()">提交</a>
 	        </form>
 	      </div>
 	    </div>
 	</body>
-	<form id="form" action="/recommendJsp">
-		<input id="link" type="hidden" />
+	<form id="form" action="/recommendJsp" method="post">
+		<input id="symptoms" name="symptoms" type="hidden" value=""/>
+		<input id="bodySigns" name="bodySigns" type="hidden" value=""/>
+		<input id="pathogenys" name="pathogeny" type="hidden" value=""/>
+		<input id="diseases" name="disease" type="hidden" value=""/>
 	</form>
 	<script>
 	  //跳转到推荐医生页面
       function recommend(){
-      	//之前患者选择的症状
-      	$link = "";
-      	$link += "${symptoms}";
+      	$("#symptoms").attr("value","");
+      	$("#bodySigns").attr("value","");
+      	$("#pathogenys").attr("value","");
+      	$("#diseases").attr("value","");
       	$(".answer:checked").each(function(){
-      		$link += $(this).attr("value")+",";
+      		if($(this).attr("questionType")=="1"){
+      			$original = $("#symptoms").attr("value");
+      			$new = $original + $(this).attr("value") + ",";
+      			$("#symptoms").attr("value",$new);
+      		}
+      		if($(this).attr("questionType")=="2"){
+      			$original = $("#bodySigns").attr("value");
+      			$new = $original + $(this).attr("value") + ",";
+      			$("#bodySigns").attr("value",$new);
+      		}
+      		if($(this).attr("questionType")=="3"){
+      			$original = $("#pathogeny").attr("value");
+      			$new = $original + $(this).attr("value") + ",";
+      			$("#pathogeny").attr("value",$new);
+      		}
+      		if($(this).attr("questionType")=="4"){
+      			$original = $("#disease").attr("value");
+      			$new = $original + $(this).attr("value") + ",";
+      			$("#disease").attr("value",$new);
+      		}
       	});
-    	$("#link").attr("value",$link);
     	$("#form").submit();
       	return false;
       }

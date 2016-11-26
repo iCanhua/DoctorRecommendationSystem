@@ -21,6 +21,7 @@ public class QuestionUtil {
 			question = new Question();
 			question.setChoices(new ArrayList<String>());
 			question.setDescription("您是否有以下症状");
+			question.setType(1);
 			questionList.add(question);
 		}
 		for (Symptom symptom : symptomSet) {
@@ -49,6 +50,7 @@ public class QuestionUtil {
 			question = new Question();
 			question.setChoices(new ArrayList<String>());
 			question.setDescription("您是否有以下体征");
+			question.setType(2);
 			questionList.add(question);
 		}
 		for (BodySigns bodySigns : bodySignsSet) {
@@ -79,6 +81,7 @@ public class QuestionUtil {
 			question = new Question();
 			question.setChoices(new ArrayList<String>());
 			question.setDescription("您是否有以下病因");
+			question.setType(3);
 			questionList.add(question);
 		}
 		for (Pathogeny pathogeny : pathogenySet) {
@@ -110,6 +113,7 @@ public class QuestionUtil {
 			question.setChoices(new ArrayList<String>());
 			question.setDescription("您是否有以下病史");
 			questionList.add(question);
+			question.setType(4);
 		}
 		for (Disease disease : medicalHistorySet) {
 			question.getChoices().add(disease.getDiseaseName().split("#")[1]);
