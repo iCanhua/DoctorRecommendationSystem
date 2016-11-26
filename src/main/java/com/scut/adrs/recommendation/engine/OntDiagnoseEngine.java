@@ -110,7 +110,6 @@ public class OntDiagnoseEngine implements DiagnoseKnowledgeEngine{
 		}
 		if(diseaseSet.size()!=0){
 			for(Disease disease:diseaseSet){
-		
 				if(diseaseAndIndex.containsKey(disease)){
 					Float index=(Float)diseaseAndIndex.get(disease)+score;
 					diseaseAndIndex.put(disease, index);
