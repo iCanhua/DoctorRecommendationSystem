@@ -29,8 +29,6 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 		
 		
 		
-		
-		
 		Map<Doctor, Float> map = new HashMap<Doctor, Float>();
 		// System.out.println("找医生");
 		Doctor doctor1 = new Doctor(OntParserDao.NS + "刘烈");
@@ -42,6 +40,9 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 		map.put(doctor3, 2.02F);
 		map.put(doctor1, 13.02F);
 		return map;
+	}
+	public static void main(String[] args) {
+		
 	}
 
 }
