@@ -107,8 +107,15 @@ public class OntParserDao{
      * 通过指定属性和值来获得约束集合；
      */
     public Set<Restriction> getRestriction( String property, String valuesFrom) {
+    	if(!property.contains(NS)){
+    		property=NS+property;
+    	}
+    	if(!valuesFrom.contains(NS)){
+    		valuesFrom=NS+valuesFrom;
+    	}
+    	
 		Set<Restriction> restrictionSet = new HashSet<Restriction>();
-		OntProperty p = model.getOntProperty(NS + property);
+		OntProperty p = model.getOntProperty(property);
 		Iterator<Restriction> i = p.listReferringRestrictions();
 		while (i.hasNext()) {
 			Restriction r = i.next();
@@ -126,6 +133,25 @@ public class OntParserDao{
 		}
 		return restrictionSet;
 	}
+    public Set<Restriction> getRestriction( String property) {
+    	if(!property.contains(NS)){
+    		property=NS+property;
+    	}
+    	
+		Set<Restriction> restrictionSet = new HashSet<Restriction>();
+		OntProperty p = model.getOntProperty( property);
+		Iterator<Restriction> i = p.listReferringRestrictions();
+		while (i.hasNext()) {
+			Restriction r = i.next();
+			if (r.isSomeValuesFromRestriction()) {
+				restrictionSet.add(r);
+			}
+			if (r.isAllValuesFromRestriction()) {
+				restrictionSet.add(r);
+			}
+		}
+		return restrictionSet;
+	}
     
     public Set<OntClass> getSubClass(Restriction re){
     	//存放所有约束相关的子类的集合
@@ -135,6 +161,19 @@ public class OntParserDao{
             ontClassSet.add(ontClass);
         }
     	return ontClassSet;
+    }
+    public  Set<OntClass> getSuperClass(boolean isDirect,String uri){
+    	if(!uri.contains(NS)){
+    		uri=NS+uri;
+    	}
+        OntClass uriClass=model.getOntClass(uri);
+        Set<OntClass> superSet=new HashSet<OntClass>();
+        for (Iterator<OntClass> i =uriClass.listSuperClasses(isDirect);i.hasNext();){
+            OntClass ontClass = i.next();
+            //System.out.println("找父类："+ontClass.getURI());
+            superSet.add(ontClass);
+        }
+        return superSet;
     }
 
     /**

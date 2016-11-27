@@ -157,18 +157,18 @@ public class RecommendController {
 			patient.getHasMedicalHistory().addAll(diseaseSet);
 		}
 		proxy.diagnose(patient);
-		for (Symptom symptom : patient.getHasSymptoms()) {
-			System.out.println(symptom.getSymptomName());
-		}
-		for (BodySigns bodySign : patient.getHasBodySigns()) {
-			System.out.println(bodySign.getBodySignName());
-		}
-		for (Disease disease : patient.getHasMedicalHistory()) {
-			System.out.println(disease.getDiseaseName());
-		}
-		for (Pathogeny pathogeny : patient.getHasPathogeny()) {
-			System.out.println(pathogeny.getPathogenyName());
-		}
+//		for (Symptom symptom : patient.getHasSymptoms()) {
+//			System.out.println(symptom.getSymptomName());
+//		}
+//		for (BodySigns bodySign : patient.getHasBodySigns()) {
+//			System.out.println(bodySign.getBodySignName());
+//		}
+//		for (Disease disease : patient.getHasMedicalHistory()) {
+//			System.out.println(disease.getDiseaseName());
+//		}
+//		for (Pathogeny pathogeny : patient.getHasPathogeny()) {
+//			System.out.println(pathogeny.getPathogenyName());
+//		}
 		Map<Disease, Float> diseaseAndIndex = patient.getDiseaseAndIndex();
 		List<Map.Entry<Disease, Float>> diseaseList = new ArrayList<Map.Entry<Disease, Float>>(
 				diseaseAndIndex.entrySet());
