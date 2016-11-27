@@ -35,8 +35,8 @@
 	<form id="form" action="/recommendJsp" method="post">
 		<input id="symptoms" name="symptoms" type="hidden" value=""/>
 		<input id="bodySigns" name="bodySigns" type="hidden" value=""/>
-		<input id="pathogenys" name="pathogeny" type="hidden" value=""/>
-		<input id="diseases" name="disease" type="hidden" value=""/>
+		<input id="pathogenys" name="pathogenys" type="hidden" value=""/>
+		<input id="diseases" name="diseases" type="hidden" value=""/>
 	</form>
 	<script>
 	  //跳转到推荐医生页面
@@ -57,14 +57,14 @@
       			$("#bodySigns").attr("value",$new);
       		}
       		if($(this).attr("questionType")=="3"){
-      			$original = $("#pathogeny").attr("value");
+      			$original = $("#pathogenys").attr("value");
       			$new = $original + $(this).attr("value") + ",";
-      			$("#pathogeny").attr("value",$new);
+      			$("#pathogenys").attr("value",$new);
       		}
       		if($(this).attr("questionType")=="4"){
-      			$original = $("#disease").attr("value");
+      			$original = $("#diseases").attr("value");
       			$new = $original + $(this).attr("value") + ",";
-      			$("#disease").attr("value",$new);
+      			$("#diseases").attr("value",$new);
       		}
       	});
     	$("#form").submit();

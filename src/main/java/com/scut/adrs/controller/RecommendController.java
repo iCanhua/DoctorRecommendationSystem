@@ -133,30 +133,42 @@ public class RecommendController {
 			for (String symptom : symptoms.split(",")) {
 				symptomSet.add(new Symptom(NS + symptom));
 			}
-			patient.setHasSymptoms(symptomSet);
+			patient.getHasSymptoms().addAll(symptomSet);
 		}
 		if (bodySigns != null && !bodySigns.equals("")) {
 			Set<BodySigns> bodySignSet = new HashSet<BodySigns>();
 			for (String bodySign : bodySigns.split(",")) {
 				bodySignSet.add(new BodySigns(NS + bodySign));
 			}
-			patient.setHasBodySigns(bodySignSet);
+			patient.getHasBodySigns().addAll(bodySignSet);
 		}
 		if (pathogenys != null && !pathogenys.equals("")) {
 			Set<Pathogeny> pathogenySet = new HashSet<Pathogeny>();
 			for (String pathogeny : pathogenys.split(",")) {
 				pathogenySet.add(new Pathogeny(NS + pathogeny));
 			}
-			patient.setHasPathogeny(pathogenySet);
+			patient.getHasPathogeny().addAll(pathogenySet);
 		}
 		if (diseases != null && !diseases.equals("")) {
 			Set<Disease> diseaseSet = new HashSet<Disease>();
 			for (String disease : diseases.split(",")) {
 				diseaseSet.add(new Disease(NS + disease));
 			}
-			patient.setHasMedicalHistory(diseaseSet);
+			patient.getHasMedicalHistory().addAll(diseaseSet);
 		}
 		proxy.diagnose(patient);
+		for (Symptom symptom : patient.getHasSymptoms()) {
+			System.out.println(symptom.getSymptomName());
+		}
+		for (BodySigns bodySign : patient.getHasBodySigns()) {
+			System.out.println(bodySign.getBodySignName());
+		}
+		for (Disease disease : patient.getHasMedicalHistory()) {
+			System.out.println(disease.getDiseaseName());
+		}
+		for (Pathogeny pathogeny : patient.getHasPathogeny()) {
+			System.out.println(pathogeny.getPathogenyName());
+		}
 		Map<Disease, Float> diseaseAndIndex = patient.getDiseaseAndIndex();
 		List<Map.Entry<Disease, Float>> diseaseList = new ArrayList<Map.Entry<Disease, Float>>(
 				diseaseAndIndex.entrySet());
@@ -181,5 +193,4 @@ public class RecommendController {
 		session.removeAttribute("patient");
 		return "doctor";
 	}
-
 }
