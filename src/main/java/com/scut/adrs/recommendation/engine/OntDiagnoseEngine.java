@@ -34,6 +34,7 @@ public class OntDiagnoseEngine implements DiagnoseKnowledgeEngine{
 	
 	@Override
 	public Patient defineDiseaseIndex(Patient patient) {
+		
 		if(patient==null){
 			return null;
 		}

@@ -130,6 +130,22 @@ public class RecommendationProxy implements PreDiagnosis, Diagnose, DoctorMatch 
 
 	@Override
 	public Patient diagnose(Patient patient) {
+		
+
+		for(Symptom sy:patient.getHasSymptoms()){
+			System.out.println("总症状："+sy.getSymptomName());
+		}
+		for(Pathogeny py:patient.getHasPathogeny()){
+			System.out.println("病因："+py.getPathogenyName());
+		}
+		for(BodySigns bs:patient.getHasBodySigns()){
+			System.out.println("体征"+bs.getBodySignName());
+		}
+		for(Disease d:patient.getHasMedicalHistory()){
+			System.out.println("病史"+d.getDiseaseName());
+		}
+		
+		
 		if (!patient.isPreDiagnosis()) {
 			throw new DiagnoseException(
 					"please prediagnose the patient before you diagnose a patient !");
