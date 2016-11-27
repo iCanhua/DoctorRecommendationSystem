@@ -31,6 +31,7 @@ public class QuestionUtil {
 				question = new Question();
 				question.setChoices(new ArrayList<String>());
 				question.setDescription("您是否有以下症状");
+				question.setType(1);
 				questionList.add(question);
 			}
 		}
@@ -61,6 +62,7 @@ public class QuestionUtil {
 				question = new Question();
 				question.setChoices(new ArrayList<String>());
 				question.setDescription("您是否有以下体征");
+				question.setType(2);
 				questionList.add(question);
 			}
 		}
@@ -92,6 +94,7 @@ public class QuestionUtil {
 				question = new Question();
 				question.setChoices(new ArrayList<String>());
 				question.setDescription("您是否有以下病因");
+				question.setType(3);
 				questionList.add(question);
 			}
 		}
@@ -122,6 +125,7 @@ public class QuestionUtil {
 				question = new Question();
 				question.setChoices(new ArrayList<String>());
 				question.setDescription("您是否有以下病史");
+				question.setType(4);
 				questionList.add(question);
 			}
 		}
