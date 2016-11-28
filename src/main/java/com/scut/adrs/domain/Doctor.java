@@ -59,5 +59,22 @@ public class Doctor {
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
 	}
+	
+	//重写该方法，便于加入相同的症状
+			public boolean equals(Object obj){
+				if(!(obj instanceof Doctor)){
+					return false;
+				}else{
+					Doctor sp=(Doctor)obj;
+					if(sp.getName().equals(this.getName())){
+						return true;
+					}
+				}
+				return false;
+			}
+			
+			public int hashCode(){  
+			    return this.getName().hashCode();
+			}
 
 }

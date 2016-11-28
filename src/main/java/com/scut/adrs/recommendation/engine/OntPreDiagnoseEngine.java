@@ -97,7 +97,7 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
 	@Override
 	public Set<Pathogeny> getRelativePathogenyByDisease(Disease disease) {
 		//定义算法属性
-    	String property="导致";
+    	String property="诱发";
     	//找到对应的所有约束
     	Set<Restriction> reSet=this.ontParserDao.getRestriction( property, disease.getDiseaseName());
     	//存放所有约束相关的子类的集合
