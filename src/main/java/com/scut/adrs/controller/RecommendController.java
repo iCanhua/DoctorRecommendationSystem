@@ -26,7 +26,6 @@ import com.scut.adrs.recommendation.InterQuestion;
 import com.scut.adrs.recommendation.RecommendationProxy;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
 import com.scut.adrs.recommendation.service.DoctorService;
-import com.scut.adrs.util.EncodingConvert;
 import com.scut.adrs.util.QuestionUtil;
 import com.scut.adrs.util.SortUtil;
 import com.scut.adrs.util.ontDaoUtils;
@@ -61,7 +60,6 @@ public class RecommendController {
 	@RequestMapping("/getSymptoms")
 	@ResponseBody
 	public List<String> getSymptoms(String position) {
-		position = EncodingConvert.convert(position);
 		List<String> symptoms = symptomService.getSymptomList("按" + position
 				+ "分");
 		return symptoms;
@@ -78,7 +76,10 @@ public class RecommendController {
 	@RequestMapping("/questionListJsp")
 	public String questionListJsp(String symptoms, HttpSession session,
 			Model model) {
-		String[] symptomsArray = EncodingConvert.convert(symptoms).split(",");
+		if (symptoms == null || symptoms.equals("")) {
+			return "redirect:/symptom";
+		}
+		String[] symptomsArray = symptoms.split(",");
 		Set<Symptom> symptomSet = new HashSet<Symptom>();
 		String NS = ontDaoUtils.getNS();
 		for (String symptom : symptomsArray) {
@@ -103,7 +104,6 @@ public class RecommendController {
 			e.printStackTrace();
 		}
 		model.addAttribute("questions", questionList);
-		model.addAttribute("symptoms", EncodingConvert.convert(symptoms));
 		session.setAttribute("patient", patient);
 		return "question";
 	}
@@ -157,18 +157,18 @@ public class RecommendController {
 			patient.getHasMedicalHistory().addAll(diseaseSet);
 		}
 		proxy.diagnose(patient);
-//		for (Symptom symptom : patient.getHasSymptoms()) {
-//			System.out.println(symptom.getSymptomName());
-//		}
-//		for (BodySigns bodySign : patient.getHasBodySigns()) {
-//			System.out.println(bodySign.getBodySignName());
-//		}
-//		for (Disease disease : patient.getHasMedicalHistory()) {
-//			System.out.println(disease.getDiseaseName());
-//		}
-//		for (Pathogeny pathogeny : patient.getHasPathogeny()) {
-//			System.out.println(pathogeny.getPathogenyName());
-//		}
+		// for (Symptom symptom : patient.getHasSymptoms()) {
+		// System.out.println(symptom.getSymptomName());
+		// }
+		// for (BodySigns bodySign : patient.getHasBodySigns()) {
+		// System.out.println(bodySign.getBodySignName());
+		// }
+		// for (Disease disease : patient.getHasMedicalHistory()) {
+		// System.out.println(disease.getDiseaseName());
+		// }
+		// for (Pathogeny pathogeny : patient.getHasPathogeny()) {
+		// System.out.println(pathogeny.getPathogenyName());
+		// }
 		Map<Disease, Float> diseaseAndIndex = patient.getDiseaseAndIndex();
 		List<Map.Entry<Disease, Float>> diseaseList = new ArrayList<Map.Entry<Disease, Float>>(
 				diseaseAndIndex.entrySet());
