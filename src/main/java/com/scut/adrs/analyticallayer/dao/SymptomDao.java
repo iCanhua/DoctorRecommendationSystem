@@ -24,7 +24,8 @@ public class SymptomDao {
 		}
 		for (Iterator<OntClass> i = positionOntClass.listSubClasses(); i
 				.hasNext();) {
-			list.add(i.next().getLocalName());
+			String name = i.next().getURI().split("#")[1];
+			list.add(name);
 		}
 		return list;
 	}

@@ -6,16 +6,16 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="/js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css">
-		<script src="/js/jquery-1.11.3/jquery.min.js"></script>
-		<script src="/js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		<link rel="stylesheet" href="<c:url value="/js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css"></c:url>">
+		<script src="<c:url value="/js/jquery-1.11.3/jquery.min.js"/>"></script>
+		<script src="<c:url value="/js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"/>"></script>
 	</head>
 	<body>
 		<c:choose>
 			 <c:when test="${flag}" >
 			    <div data-role="page" id="pageone">
 			      <div data-role="header">
-			        <a href="/symptom" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left" data-ajax="false">返回</a>
+			        <a href="<%=request.getContextPath()%>/symptom" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left" data-ajax="false">返回</a>
 			        <h1>推荐列表</h1>
 			      </div>
 			      <div data-role="main" class="ui-content">
@@ -51,7 +51,7 @@
 			<c:otherwise>
 				<script type="text/javascript">
 					alert("不可重复提交");
-					window.location.href="/symptom";
+					window.location.href="<%=request.getContextPath()%>/symptom";
 				</script>
 				<a href="javascript:void(0)" class="ui-btn" onclick="alert('aa')">跳转</a>
 			</c:otherwise>
