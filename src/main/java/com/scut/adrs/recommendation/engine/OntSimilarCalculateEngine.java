@@ -62,14 +62,14 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 				Disease matchDisease=new Disease(r.asSomeValuesFromRestriction().getSomeValuesFrom().getURI());
 				if(DiseaseMap.keySet().contains(matchDisease)){
 					String docUri=r.asSomeValuesFromRestriction().listInstances().next().getURI();
-					System.out.println("找到医生："+docUri+"：这个医生擅长"+r.asSomeValuesFromRestriction().getSomeValuesFrom().getLocalName());
+					//System.out.println("找到医生："+docUri+"：这个医生擅长"+r.asSomeValuesFromRestriction().getSomeValuesFrom().getLocalName());
 					if("".equals(docUri)||docUri!=null){
 						Doctor doctor=new Doctor(docUri);
 						if(doctorMap.containsKey(doctor)){
 							Float index=DiseaseMap.get(matchDisease);
 							index=index+doctorMap.get(doctor);
 							doctorMap.put(doctor, index);
-							System.out.println(doctor.getName()+"这个医生升了："+index);
+							//System.out.println(doctor.getName()+"这个医生升了："+index);
 						}else{
 							doctorMap.put(doctor, DiseaseMap.get(matchDisease));
 						}
@@ -81,14 +81,14 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 				Disease matchDisease=new Disease(r.asAllValuesFromRestriction().getAllValuesFrom().getURI());
 				if(DiseaseMap.keySet().contains(matchDisease)){
 					String docUri=r.asAllValuesFromRestriction().listInstances().next().getURI();
-					System.out.println("找到医生："+docUri);
+					//System.out.println("找到医生："+docUri);
 					if("".equals(docUri)||docUri!=null){
 						Doctor doctor=new Doctor(docUri);
 						if(doctorMap.containsKey(doctor)){
 							Float index=DiseaseMap.get(matchDisease);
 							index=index+doctorMap.get(doctor);
 							doctorMap.put(doctor, index);
-							System.out.println(doctor.getName()+"这个医生升了："+index);
+							//System.out.println(doctor.getName()+"这个医生升了："+index);
 						}else{
 							doctorMap.put(doctor, DiseaseMap.get(matchDisease));
 						}
@@ -101,14 +101,14 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 				Disease matchDisease=new Disease(r.asSomeValuesFromRestriction().getSomeValuesFrom().getURI());
 				if(DiseaseMap.keySet().contains(matchDisease)){
 					String docUri=r.asSomeValuesFromRestriction().listInstances().next().getURI();
-					System.out.println("找到尤其擅长的医生："+docUri+"：这个医生擅长"+r.asSomeValuesFromRestriction().getSomeValuesFrom().getLocalName());
+					//System.out.println("找到尤其擅长的医生："+docUri+"：这个医生擅长"+r.asSomeValuesFromRestriction().getSomeValuesFrom().getLocalName());
 					if("".equals(docUri)||docUri!=null){
 						Doctor doctor=new Doctor(docUri);
 						if(doctorMap.containsKey(doctor)){
 							Float index=DiseaseMap.get(matchDisease);
 							index=(index+doctorMap.get(doctor))*1.5F;
 							doctorMap.put(doctor, index);
-							System.out.println(doctor.getName()+"这个医生升了："+index);
+							//System.out.println(doctor.getName()+"这个医生升了："+index);
 						}else{
 							doctorMap.put(doctor, DiseaseMap.get(matchDisease));
 						}
@@ -119,14 +119,14 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 				Disease matchDisease=new Disease(r.asAllValuesFromRestriction().getAllValuesFrom().getURI());
 				if(DiseaseMap.keySet().contains(matchDisease)){
 					String docUri=r.asAllValuesFromRestriction().listInstances().next().getURI();
-					System.out.println("找到尤其擅长的医生："+docUri);
+					//System.out.println("找到尤其擅长的医生："+docUri);
 					if("".equals(docUri)||docUri!=null){
 						Doctor doctor=new Doctor(docUri);
 						if(doctorMap.containsKey(doctor)){
 							Float index=DiseaseMap.get(matchDisease);
 							index=(index+doctorMap.get(doctor))*1.5F;
 							doctorMap.put(doctor, index);
-							System.out.println(doctor.getName()+"这个医生升了："+index);
+							//System.out.println(doctor.getName()+"这个医生升了："+index);
 						}else{
 							doctorMap.put(doctor, DiseaseMap.get(matchDisease));
 						}

@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.apache.jena.ontology.OntClass;
 
-public class BodySigns {
+public class BodySigns implements Resourse{
 	/**
 	 * 一般用RDF表示
 	 */
@@ -49,6 +49,12 @@ public class BodySigns {
 		set.add(b);
 		set.add(a);
 		System.out.println("大小"+set.size());
+	}
+
+	@Override
+	public String getIRI() {
+		// TODO Auto-generated method stub
+		return this.bodySignName;
 	}
 	
 	

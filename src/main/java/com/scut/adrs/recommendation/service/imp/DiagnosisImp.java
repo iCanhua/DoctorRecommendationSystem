@@ -19,12 +19,13 @@ import com.scut.adrs.recommendation.service.Diagnose;
 import com.scut.adrs.recommendation.service.DiagnoseKnowledgeEngine;
 @Service
 public class DiagnosisImp implements Diagnose{
-	
+	//consinEngine
 	@Autowired
 	@Qualifier("consinEngine")
 	DiagnoseKnowledgeEngine knowledgeEngine;
 	@Override
 	public Patient diagnose(Patient patient) {
+		
 		if(!patient.isPreDiagnosis()){
 			throw new DiagnoseException("please prediagnose the patient before you diagnose a patient !");
 		}

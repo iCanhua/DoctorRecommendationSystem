@@ -11,5 +11,6 @@
 	<!--从doctor.owl中提取model-->  
     <bean name="myOntModel" class="com.scut.adrs.analyticallayer.dao.OntModelFactory" factory-method="getOntModel"></bean> 
     <bean id="consinEngine" class="com.scut.adrs.recommendation.engine.OntCosinDiagnoseEngine" ></bean> 
+    <bean id="diagnoseEngine" class="com.scut.adrs.recommendation.engine.OntDiagnoseEngine" ></bean>
     
 </beans>

@@ -1,4 +1,6 @@
 package com.scut.adrs.recommendation.engine;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +16,7 @@ import com.scut.adrs.domain.BodySigns;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
+import com.scut.adrs.domain.Resourse;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.dao.OntParserDao;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
@@ -39,7 +42,6 @@ public class OntCosinDiagnoseEngine implements DiagnoseKnowledgeEngine{
 	public void setPreDiaEngine(PreDiaKnowledgeEngine preDiaEngine) {
 		this.preDiaEngine = preDiaEngine;
 	}
-	
 	
 	@Override
 	public Patient defineDiseaseIndex(Patient patient) {
@@ -77,44 +79,39 @@ public class OntCosinDiagnoseEngine implements DiagnoseKnowledgeEngine{
 				continue;
 			}
 		}
-		//对每个疾病计算余弦相似度
+		//对每个疾病计算匹配相似度
 		for(Disease ds:diseaseSet){
 			Float sim=consinIndexEvaluate(patient,ds).floatValue();
+			BigDecimal b=new BigDecimal(sim);  
+			sim=b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 			patient.getDiseaseAndIndex().put(ds, sim);
-			System.out.println("计算了一个疾病："+ds.getDiseaseName()+"的余弦相似度："+sim);
+			//System.out.println("计算了一个疾病："+ds.getDiseaseName()+"的余弦相似度："+sim);
 		}
 		return patient;
 	}
 	private Double consinIndexEvaluate(Patient patient,Disease disease){
-		//复用代码，其实匹配度所用到的疾病相关记录，可以使用之前的，从容器上下文中获取，这里可以优化！
-		Float S=matchingRate(preDiaEngine.getRelativeSymptomByDisease(disease),patient.getHasSymptoms());
-		Float B=matchingRate(preDiaEngine.getRelativeBodySignsByDisease(disease),patient.getHasBodySigns());
-		Float P=matchingRate(preDiaEngine.getRelativePathogenyByDisease(disease),patient.getHasPathogeny());
-		Float M=matchingRate(preDiaEngine.getRelativeDiseaseByDisease(disease),patient.getHasMedicalHistory());
-		//System.out.println("疾病"+disease.getDiseaseName()+"的匹配度为："+S+" "+B+" "+P+" "+M);
-		Float up=S+B+P+M;
-		Float dowm=S*S+B*B+P*P+M*M;
-		double sim=up/(2*Math.sqrt(dowm));
-		System.out.println("未转化的的余弦相似度："+sim);
+		//复用预诊断接口，求出相关概念集，计算各个概念集的余弦相似度，其实可以不用接口，用到的疾病相关记录，可以使用之前的，从容器上下文中获取，这里可以优化！
+		Float S=new CosinSimTool(constructStrArray(preDiaEngine.getRelativeSymptomByDisease(disease)), constructStrArray(patient.getHasSymptoms())).sim().floatValue();
+		Float B=new CosinSimTool(constructStrArray(preDiaEngine.getRelativeBodySignsByDisease(disease)), constructStrArray(patient.getHasBodySigns())).sim().floatValue();
+		Float P=new CosinSimTool(constructStrArray(preDiaEngine.getRelativePathogenyByDisease(disease)), constructStrArray(patient.getHasPathogeny())).sim().floatValue();
+		Float M=new CosinSimTool(constructStrArray(preDiaEngine.getRelativeDiseaseByDisease(disease)), constructStrArray(patient.getHasMedicalHistory())).sim().floatValue();
+		//System.out.println("疾病"+disease.getDiseaseName()+"的四项余弦相似度为："+S+" "+B+" "+P+" "+M);
+		int W=patient.getHasSymptoms().size()+patient.getHasBodySigns().size()+patient.getHasPathogeny().size()+patient.getHasMedicalHistory().size();
+		Float Ws=(float)patient.getHasSymptoms().size();
+		Float Wb=(float)patient.getHasBodySigns().size();
+		Float Wp=(float)patient.getHasPathogeny().size();
+		Float Wm=(float)patient.getHasMedicalHistory().size();
+		//System.out.println(W+" 的四项权重分别为："+Ws+" "+Wb+" "+Wp+" "+Wm);
+		double sim=(Ws*S+Wb*B+Wp*P+Wm*M)/W;
+		//System.out.println("未转化的的余弦相似度："+sim);
 		return sim;
 	}
-	
-	//计算匹配度
-	private Float matchingRate(Set d,Set u){
-		if(d.size()==0){
-			return 0F;
+	private ArrayList<String>  constructStrArray(Set<? extends Resourse> resourse){
+		ArrayList<String> array=new ArrayList<String>();
+		for(Resourse re:resourse){
+			array.add(re.getIRI());
 		}
-		int count=0;
-		Float rate=0F;
-		//System.out.println("计算前d、u的size:"+d.size()+" "+u.size());
-		for(Object ele:d){
-			if(u.contains(ele)){
-				count++;
-			}
-		}
-		rate=((float)count/d.size());
-		System.out.println("相同的有多少个？？："+count+"疾病共多少个？？"+d.size()+"计算得到的rate为："+rate);
-		return rate;
+		return array;
 	}
 	
 	/**
