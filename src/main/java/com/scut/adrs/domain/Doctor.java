@@ -1,6 +1,6 @@
 package com.scut.adrs.domain;
 
-public class Doctor {
+public class Doctor implements Resourse{
 	// 用URI表示其唯一实例
 	public String name;
 	public String profession;
@@ -61,20 +61,26 @@ public class Doctor {
 	}
 	
 	//重写该方法，便于加入相同的症状
-			public boolean equals(Object obj){
-				if(!(obj instanceof Doctor)){
-					return false;
-				}else{
-					Doctor sp=(Doctor)obj;
-					if(sp.getName().equals(this.getName())){
-						return true;
-					}
-				}
-				return false;
+	public boolean equals(Object obj){
+		if(!(obj instanceof Doctor)){
+			return false;
+		}else{
+			Doctor sp=(Doctor)obj;
+			if(sp.getName().equals(this.getName())){
+				return true;
 			}
-			
-			public int hashCode(){  
-			    return this.getName().hashCode();
-			}
+		}
+		return false;
+	}
+	
+	public int hashCode(){  
+	    return this.getName().hashCode();
+	}
+
+	@Override
+	public String getIRI() {
+		// TODO Auto-generated method stub
+		return this.name;
+	}
 
 }

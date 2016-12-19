@@ -1,6 +1,6 @@
 package com.scut.adrs.domain;
 
-public class Disease {
+public class Disease implements Resourse{
 	/**
 	 * 一般用RDF表示
 	 */
@@ -43,6 +43,12 @@ public class Disease {
 
 	public int hashCode() {
 		return this.diseaseName.hashCode();
+	}
+
+	@Override
+	public String getIRI() {
+		// TODO Auto-generated method stub
+		return this.diseaseName;
 	}
 
 }

@@ -52,7 +52,7 @@
 		    <ul data-role="listview" id="symptom">
 		    </ul>
 		  </div>
-		  <form id="form" action="<%=request.getContextPath()%>/questionListJsp" method="post" onsubmit="return diagnose()">
+		  <form id="form" action="<%=request.getContextPath()%>/questionListJsp" method="post" data-ajax="false">
 			<input id="symptoms" name="symptoms" type="hidden" value=""/>
 			<input class="ui-btn" type="submit" value="诊断">
 		  </form>
@@ -177,12 +177,12 @@
 		$("#pic").rwdImageMaps();             
    });
    
-   $(document).on("pageinit","#pagefour",function(){
+   $(document).on("pagecreate","#pagefour",function(){
      //添加到已选择的症状列表(人体图页面)
      $("#pagefour #enter").on("tap",function(){
        clonePartTwoSymptom();
      });               
-   }); 
+   });
    
    function clonePartOneSymptom(){
    	   var $newli = $("#pagetwo .choose").clone();
@@ -190,6 +190,7 @@
        $newli.css("color","#333333");
        $newli.removeClass("choose");
        $("#symptom").append($newli);
+       refreshForm();
    }
    
     function clonePartTwoSymptom(){
@@ -198,6 +199,16 @@
        $newli.css("color","#333333");
        $newli.removeClass("choose");
        $("#symptom").append($newli);
+       refreshForm();
+   }
+    
+   function refreshForm(){
+	   $("#symptoms").attr("value","");
+	   $symptom = "";
+	   $("#symptom li").each(function(){
+	   	$symptom += $(this).text()+",";
+	   });
+	   $("#symptoms").attr("value",$symptom);
    }
    
    //为列表(partone)折叠块添加展开事件，动态添加症状

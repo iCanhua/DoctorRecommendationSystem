@@ -71,7 +71,10 @@ public class RecommendationProxy implements PreDiagnosis, Diagnose, DoctorMatch 
 
 	@Override
 	public Patient prediagnosis(Patient patient, InterQuestion question) {
+		//long starTime=System.currentTimeMillis();
 		Patient pt = preDiagnose.prediagnosis(patient, question);
+		//long endTime=System.currentTimeMillis();
+		//System.out.println("预诊断时间："+(endTime-starTime));
 		// pt.setPreDiagnosis(true);
 		return pt;
 	}
@@ -146,7 +149,11 @@ public class RecommendationProxy implements PreDiagnosis, Diagnose, DoctorMatch 
 			throw new DiagnoseException(
 					"please prediagnose the patient before you diagnose a patient !");
 		}
-		return diagnose.diagnose(patient);
+		//long starTime=System.currentTimeMillis();
+		Patient patient_=diagnose.diagnose(patient);
+		//long endTime=System.currentTimeMillis();
+		//System.out.println("诊断时间："+(endTime-starTime));
+		return patient_;
 	}
 
 	@Override
@@ -158,7 +165,11 @@ public class RecommendationProxy implements PreDiagnosis, Diagnose, DoctorMatch 
 			throw new DiagnoseException(
 					"please prediagnose the patient before you match a doctor !");
 		}
-		return doctorMatch.doctorMatch(patient);
+		//long starTime=System.currentTimeMillis();
+		Map<Doctor, Float> map=doctorMatch.doctorMatch(patient);
+		//long endTime=System.currentTimeMillis();
+		//System.out.println("医生匹配时间："+(endTime-starTime));
+		return map;
 	}
 
 }

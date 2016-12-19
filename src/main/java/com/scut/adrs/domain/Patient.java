@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class Patient {
+public class Patient implements Resourse{
 
 	private String name;
 	private String sex;
@@ -113,6 +113,12 @@ public class Patient {
 				+ ", hasPathogeny=" + hasPathogeny + ", hasMedicalHistory="
 				+ hasMedicalHistory + ", DiseaseAndIndex=" + DiseaseAndIndex
 				+ "]";
+	}
+
+	@Override
+	public String getIRI() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.scut.adrs.domain;
 
-public class Pathogeny {
+public class Pathogeny implements Resourse{
 	/**
 	 * 一般用RDF表示
 	 */
@@ -34,6 +34,12 @@ public class Pathogeny {
 		
 		public int hashCode(){  
 		    return this.pathogenyName.hashCode();
+		}
+
+		@Override
+		public String getIRI() {
+			// TODO Auto-generated method stub
+			return this.pathogenyName;
 		}
 	
 	

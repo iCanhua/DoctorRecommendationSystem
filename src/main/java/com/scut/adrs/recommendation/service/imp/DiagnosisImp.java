@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.github.andrewoma.dexx.collection.ArrayList;
@@ -18,10 +19,13 @@ import com.scut.adrs.recommendation.service.Diagnose;
 import com.scut.adrs.recommendation.service.DiagnoseKnowledgeEngine;
 @Service
 public class DiagnosisImp implements Diagnose{
+	//consinEngine
 	@Autowired
+	@Qualifier("consinEngine")
 	DiagnoseKnowledgeEngine knowledgeEngine;
 	@Override
 	public Patient diagnose(Patient patient) {
+		
 		if(!patient.isPreDiagnosis()){
 			throw new DiagnoseException("please prediagnose the patient before you diagnose a patient !");
 		}
@@ -35,9 +39,7 @@ public class DiagnosisImp implements Diagnose{
 	 */
 	private Map<Disease,Float> sortAndLimited(Map<Disease,Float> diseaseAndIndex,int Limited){
 		//List<Entry<Disease,Float>> list=new ArrayList<>();
-		
 		List<Map.Entry<Disease, Float>> list =new LinkedList<Map.Entry<Disease, Float>>( diseaseAndIndex.entrySet() );
-		
 		Collections.sort( list, new Comparator<Map.Entry<Disease, Float>>()  
 		        {  
 					@Override
