@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ontDaoUtils {
-	static String filepath="file:/C:\\Users\\FAN\\Desktop\\医院项目\\医生推荐系统\\本体库及工具\\本体库\\正式本体库\\master\\11.8.owl";
+	static String filepath="11.25.owl";
 	static String SOURSE;
     public static String getFilepath() {
 		return filepath;
@@ -23,7 +23,7 @@ public class ontDaoUtils {
         OntModel  base= ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
         base.read(filepath);
         OntDocumentManager documentManager=base.getDocumentManager();
-        base = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM_MICRO_RULE_INF, base );
+        base = ModelFactory.createOntologyModel( OntModelSpec.OWL_MEM_TRANS_INF, base );
         System.out.println("本体模型读取成功");
         return base;
 

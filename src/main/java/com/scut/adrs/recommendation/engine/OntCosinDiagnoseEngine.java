@@ -126,13 +126,13 @@ public class OntCosinDiagnoseEngine implements DiagnoseKnowledgeEngine{
 		for(Restriction re:reList){
     		if(re.isAllValuesFromRestriction()){
     			OntClass ontClass=re.asAllValuesFromRestriction().getAllValuesFrom().as(OntClass.class);
-    			if(isSuperClass(OntParserDao.NS+"疾病及综合症", ontClass)){
+    			if(ontClass.hasSuperClass(ontParserDao.getModel().getOntClass(ontParserDao.NS+"疾病及综合症"))){
     				diseaseSet.add(new Disease(ontClass.getURI()));
     			}
     		}
     		if(re.isSomeValuesFromRestriction()){
     			OntClass ontClass=re.asSomeValuesFromRestriction().getSomeValuesFrom().as(OntClass.class);
-    			if(isSuperClass(OntParserDao.NS+"疾病及综合症", ontClass)){
+    			if(ontClass.hasSuperClass(ontParserDao.getModel().getOntClass(ontParserDao.NS+"疾病及综合症"))){
     				diseaseSet.add(new Disease(ontClass.getURI()));
     			}
     		}
@@ -140,22 +140,22 @@ public class OntCosinDiagnoseEngine implements DiagnoseKnowledgeEngine{
 		return diseaseSet;
 	}
 	
-	/**
-	 * 抽取共同部分代码，判断某个本体是否为superURI的之类
-	 * @param superRdf
-	 * @param ontClass
-	 * @return
-	 */
-	private boolean isSuperClass(String superURI,OntClass ontClass){
-		boolean finded=false;
-		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
-		while(iterator.hasNext()){
-			OntClass superClass=(OntClass) iterator.next();
-			if(superURI.equals(superClass.getURI())){
-				finded=true;
-			}
-		}
-		return finded;
-	}
+//	/**
+//	 * 抽取共同部分代码，判断某个本体是否为superURI的子类
+//	 * @param superRdf
+//	 * @param ontClass
+//	 * @return
+//	 */
+//	private boolean isSuperClass(String superURI,OntClass ontClass){
+//		boolean finded=false;
+//		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
+//		while(iterator.hasNext()){
+//			OntClass superClass=(OntClass) iterator.next();
+//			if(superURI.equals(superClass.getURI())){
+//				finded=true;
+//			}
+//		}
+//		return finded;
+//	}
 
 }
