@@ -131,13 +131,13 @@ public class OntDiagnoseEngine implements DiagnoseKnowledgeEngine{
 		for(Restriction re:reList){
     		if(re.isAllValuesFromRestriction()){
     			OntClass ontClass=re.asAllValuesFromRestriction().getAllValuesFrom().as(OntClass.class);
-    			if(isSuperClass(OntParserDao.NS+"疾病及综合症", ontClass)){
+    			if(ontClass.hasSuperClass(ontParserDao.getModel().getOntClass(ontParserDao.NS+"疾病及综合症"))){
     				diseaseSet.add(new Disease(ontClass.getURI()));
     			}
     		}
     		if(re.isSomeValuesFromRestriction()){
     			OntClass ontClass=re.asSomeValuesFromRestriction().getSomeValuesFrom().as(OntClass.class);
-    			if(isSuperClass(OntParserDao.NS+"疾病及综合症", ontClass)){
+    			if(ontClass.hasSuperClass(ontParserDao.getModel().getOntClass(ontParserDao.NS+"疾病及综合症"))){
     				diseaseSet.add(new Disease(ontClass.getURI()));
     			}
     		}
@@ -151,17 +151,17 @@ public class OntDiagnoseEngine implements DiagnoseKnowledgeEngine{
 	 * @param ontClass
 	 * @return
 	 */
-	private boolean isSuperClass(String superURI,OntClass ontClass){
-		boolean finded=false;
-		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
-		while(iterator.hasNext()){
-			OntClass superClass=(OntClass) iterator.next();
-			if(superURI.equals(superClass.getURI())){
-				finded=true;
-			}
-		}
-		return finded;
-	}
+//	private boolean isSuperClass(String superURI,OntClass ontClass){
+//		boolean finded=false;
+//		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
+//		while(iterator.hasNext()){
+//			OntClass superClass=(OntClass) iterator.next();
+//			if(superURI.equals(superClass.getURI())){
+//				finded=true;
+//			}
+//		}
+//		return finded;
+//	}
 
 
 }
