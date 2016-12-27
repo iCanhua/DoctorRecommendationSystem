@@ -1,4 +1,13 @@
-.people_main
-{
+.choose{
+	background-color: #373737;
+	color: #FFFFFF;
+}
+.people_main{
 	text-align: center;
+}
+#pic {
+	border: none;
+	height: auto;
+	max-width: 100%;
+	width: auto;
 }

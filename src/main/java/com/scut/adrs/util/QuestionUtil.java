@@ -20,7 +20,7 @@ public class QuestionUtil {
 		} else {
 			question = new Question();
 			question.setChoices(new ArrayList<String>());
-			question.setDescription("您是否有以下症状");
+			question.setDescription("您是否伴随有以下症状");
 			question.setType(1);
 			questionList.add(question);
 		}
@@ -30,7 +30,7 @@ public class QuestionUtil {
 			if (i % 10 == 0) {
 				question = new Question();
 				question.setChoices(new ArrayList<String>());
-				question.setDescription("您是否有以下症状");
+				question.setDescription("您是否伴随有以下症状");
 				question.setType(1);
 				questionList.add(question);
 			}
@@ -50,18 +50,17 @@ public class QuestionUtil {
 		} else {
 			question = new Question();
 			question.setChoices(new ArrayList<String>());
-			question.setDescription("您是否有以下体征");
+			question.setDescription("您在出现不适前是否曾有以下情况");
 			question.setType(2);
 			questionList.add(question);
 		}
 		for (BodySigns bodySigns : bodySignsSet) {
-			question.getChoices()
-					.add(bodySigns.getBodySignName().split("#")[1]);
+			question.getChoices().add(bodySigns.getBodySignName().split("#")[1]);
 			i++;
 			if (i % 10 == 0) {
 				question = new Question();
 				question.setChoices(new ArrayList<String>());
-				question.setDescription("您是否有以下体征");
+				question.setDescription("您在出现不适前是否曾有以下情况");
 				question.setType(2);
 				questionList.add(question);
 			}
@@ -72,8 +71,7 @@ public class QuestionUtil {
 		return questionList;
 	}
 
-	public static List<Question> getPathogenyQuestion(
-			Set<Pathogeny> pathogenySet) {
+	public static List<Question> getPathogenyQuestion(Set<Pathogeny> pathogenySet) {
 		int i = 0;
 		List<Question> questionList = new ArrayList<Question>();
 		Question question = null;
@@ -82,18 +80,17 @@ public class QuestionUtil {
 		} else {
 			question = new Question();
 			question.setChoices(new ArrayList<String>());
-			question.setDescription("您是否有以下病因");
+			question.setDescription("您是否曾经或者目前患有以下疾病");
 			question.setType(3);
 			questionList.add(question);
 		}
 		for (Pathogeny pathogeny : pathogenySet) {
-			question.getChoices().add(
-					pathogeny.getPathogenyName().split("#")[1]);
+			question.getChoices().add(pathogeny.getPathogenyName().split("#")[1]);
 			i++;
 			if (i % 10 == 0) {
 				question = new Question();
 				question.setChoices(new ArrayList<String>());
-				question.setDescription("您是否有以下病因");
+				question.setDescription("您是否曾经或者目前患有以下疾病");
 				question.setType(3);
 				questionList.add(question);
 			}
@@ -104,8 +101,7 @@ public class QuestionUtil {
 		return questionList;
 	}
 
-	public static List<Question> getMedicalHistoryQuestion(
-			Set<Disease> medicalHistorySet) {
+	public static List<Question> getMedicalHistoryQuestion(Set<Disease> medicalHistorySet) {
 		int i = 0;
 		List<Question> questionList = new ArrayList<Question>();
 		Question question = null;

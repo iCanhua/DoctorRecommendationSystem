@@ -1,23 +1,52 @@
 package com.scut.adrs.domain;
 
-public class Doctor implements Resourse{
+import java.util.Set;
+
+public class Doctor implements Resourse {
 	// 用URI表示其唯一实例
+
+	// 医生名字
 	public String name;
-	public String profession;
-	public String field;
-	public String expert;
+	// 医生介绍
 	public String introduction;
+	// 所属组
+	public Set<String> group;
+	// 擅长
+	public Set<String> expert;
+	// 尤其擅长
+	public Set<String> sexpert;
+	// 头衔
+	public Set<String> title;
+
+	public Doctor() {
+
+	}
 
 	public Doctor(String doctorName) {
 		name = doctorName;
 	}
 
-	public Doctor(String name, String profession, String field, String expert) {
-		super();
-		this.name = name;
-		this.profession = profession;
-		this.field = field;
-		this.expert = expert;
+	// 重写该方法，便于加入相同的症状
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Doctor)) {
+			return false;
+		} else {
+			Doctor sp = (Doctor) obj;
+			if (sp.getName().equals(this.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public int hashCode() {
+		return this.getName().hashCode();
+	}
+
+	@Override
+	public String getIRI() {
+		// TODO Auto-generated method stub
+		return this.name;
 	}
 
 	public String getName() {
@@ -28,30 +57,6 @@ public class Doctor implements Resourse{
 		this.name = name;
 	}
 
-	public String getProfession() {
-		return profession;
-	}
-
-	public void setProfession(String profession) {
-		this.profession = profession;
-	}
-
-	public String getField() {
-		return field;
-	}
-
-	public void setField(String field) {
-		this.field = field;
-	}
-
-	public String getExpert() {
-		return expert;
-	}
-
-	public void setExpert(String expert) {
-		this.expert = expert;
-	}
-
 	public String getIntroduction() {
 		return introduction;
 	}
@@ -59,28 +64,37 @@ public class Doctor implements Resourse{
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
 	}
-	
-	//重写该方法，便于加入相同的症状
-	public boolean equals(Object obj){
-		if(!(obj instanceof Doctor)){
-			return false;
-		}else{
-			Doctor sp=(Doctor)obj;
-			if(sp.getName().equals(this.getName())){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public int hashCode(){  
-	    return this.getName().hashCode();
+
+	public Set<String> getGroup() {
+		return group;
 	}
 
-	@Override
-	public String getIRI() {
-		// TODO Auto-generated method stub
-		return this.name;
+	public void setGroup(Set<String> group) {
+		this.group = group;
+	}
+
+	public Set<String> getExpert() {
+		return expert;
+	}
+
+	public void setExpert(Set<String> expert) {
+		this.expert = expert;
+	}
+
+	public Set<String> getTitle() {
+		return title;
+	}
+
+	public void setTitle(Set<String> title) {
+		this.title = title;
+	}
+
+	public Set<String> getSexpert() {
+		return sexpert;
+	}
+
+	public void setSexpert(Set<String> sexpert) {
+		this.sexpert = sexpert;
 	}
 
 }

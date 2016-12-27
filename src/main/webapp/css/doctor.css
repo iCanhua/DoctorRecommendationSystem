@@ -1,0 +1,45 @@
+.outside {
+    border: 1px solid; 
+    height: auto;
+    padding: 10px;
+}
+.block {
+	background-color: white;
+	border: 1px solid;
+	border-radius:5px;
+	margin: 10px 0px 10px 0px;
+}
+#name {
+	font-weight: bold;
+	padding: 40px 0px 0px 0px;
+}
+#title {
+	padding: 10px 0px 0px 0px;
+}
+#pic {
+	height:120px;			
+}
+.detail {
+	padding: 8px;
+}
+#picDiv {
+	padding: 10px;
+}
+.head {
+	background-color: #f3f3f3;
+	border-bottom: 1px solid;
+	font-weight: bold;
+	padding: 5px;
+}
+.content {
+	background-color: white;
+	padding: 5px;
+	min-height: 30px;
+}
+.explain {
+	background-color: white;
+	border: 1px solid;
+	border-radius:5px;
+	margin: 10px 0px 10px 0px;
+	min-height: 130px;
+}
