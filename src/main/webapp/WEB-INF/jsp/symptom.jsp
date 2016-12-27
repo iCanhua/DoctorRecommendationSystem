@@ -5,33 +5,16 @@
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" style="text/css" href="<c:url value="/js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css"/>" />
+		<link rel="stylesheet" style="text/css" href="<c:url value="/css/symptom.css"/>" />
 		<script src="<c:url value="/js/jquery-1.11.3/jquery.min.js"/>"></script>
 		<script src="<c:url value="/js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"/>"></script>
 		<script src="<c:url value="/js/jquery.rwdImageMaps.min.js"/>"></script>
-	    <style>
-	      .choose
-	      {
-	        background-color: #373737;
-	        color: #FFFFFF;
-	      }
-	      .people_main
-		  {
-			text-align: center;
-		  }
-	      #pic 
-		  {
-			border: none;
-			height: auto;
-			max-width: 100%;
-			width: auto;
-		  }
-	    </style>
 	</head>
 	<body>
 		<div data-role="page" id="pagethree">
 			<div data-role="header">
 			   <h1>人体图</h1>
-			   <a href="#pagetwo" id="enter" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-icon-bullets ui-btn-icon-left">列表选择</a>
+			   <a href="#pagefive" id="enter" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-icon-bullets ui-btn-icon-left">列表选择</a>
 			</div>
 			<div data-role="main" class="people_main">
 				<img id="pic" src="<c:url value="/images/man_face.png"/>" width="638" height="1160" usemap="#Map1">
@@ -46,7 +29,7 @@
 		  <div data-role="header">
 		    <a href="#pagethree" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">人体图选择</a>
 		    <h1>症状</h1>
-		    <a href="#pagetwo" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-icon-plus ui-btn-icon-left">列表选择</a>
+		    <a href="#pagefive" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-icon-plus ui-btn-icon-left">列表选择</a>
 		  </div>
 		  <div data-role="content">
 		    <ul data-role="listview" id="symptom">
@@ -59,14 +42,21 @@
 		
 		</div>
 
-		<div data-role="page" id="pagetwo">
+<!-- 		<div data-role="page" id="pagetwo">
 		  <div data-role="header">
 		    <a href="#pagethree" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">人体图选择</a>
 		    <h1>医学词典</h1>
 		    <a href="#pageone" id="enter" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-icon-check ui-btn-icon-left">确定</a>
 		  </div>
 		  <div data-role="main">
-		    <div class="partone" data-role="collapsible-set">
+		   
+	        <select id="select1" data-native-menu="false">
+	        </select>
+	        
+	        <select id="select2" data-native-menu="false">
+	        </select>
+	      
+		    <div class="partone" data-role="collapsibleset">
 		      <div id="全身" data-role="collapsible">
 		        <h3>全身</h3>
 		        <ul data-role='listview'></ul>
@@ -105,7 +95,7 @@
 		      </div>
 		    </div>
 		  </div>
-		</div>
+		</div> -->
 
 
 
@@ -117,10 +107,43 @@
 			</div>
 			
 			<div data-role="main" class="ui-content">
-				<ul data-role="listview">
-				</ul>
+				<select id="select3" >
+		        </select>
+		        
+		        <select id="select4" >
+		        </select>
+		        
+		         <a href="#" class="ui-btn" onclick="filter('select3','select4','pagefour')">筛选</a>
+		        
+		        <div style="margin-top: 35px">
+					<ul data-role="listview">
+					</ul>
+				</div>
 			</div>
 		</div>
+		
+		<div data-role="page" id="pagefive">
+		  <div data-role="header">
+		    <a href="#pagethree" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">人体图选择</a>
+		    <h1>医学词典</h1>
+		  </div>
+		  <div data-role="main">
+	      
+		   	<ul data-role="listview">
+		      <li><a part="全身" href="#pagefour">全身</a></li>
+		      <li><a part="四肢" href="#pagefour">四肢</a></li>
+		      <li><a part="头部" href="#pagefour">头部</a></li>
+		      <li><a part="胸部" href="#pagefour">胸部</a></li>
+		      <li><a part="腰部" href="#pagefour">腰部</a></li>
+		      <li><a part="腹部" href="#pagefour">腹部</a></li>
+		      <li><a part="颈部" href="#pagefour">颈部</a></li>
+		      <li><a part="排泄部位" href="#pagefour">排泄部位</a></li>
+		      <li><a part="生殖部位" href="#pagefour">生殖部位</a></li>
+		    </ul>
+		    
+		  </div>
+		</div>
+		
 		</body>
 		<map name="Map1" id="Map1">
 		  <area shape="rect" coords="253,28,364,181" href="#pagefour" part="头部"/>
@@ -166,23 +189,94 @@
 		</map>
 <script>
    
-   $(document).on("pagecreate","#pagetwo",function(){
+/*    $(document).on("pagecreate","#pagetwo",function(){
+	 appendSelect($("#select1"),$("#select2"));
      //添加到已选择的症状列表(列表页面)
      $("#pagetwo #enter").on("tap",function(){
        clonePartOneSymptom();
      });                
-   });
+   }); */
    
    $(document).on("pagecreate","#pagethree",function(){
 		$("#pic").rwdImageMaps();             
    });
    
    $(document).on("pagecreate","#pagefour",function(){
+	 appendSelect($("#select3"),$("#select4"));
      //添加到已选择的症状列表(人体图页面)
      $("#pagefour #enter").on("tap",function(){
        clonePartTwoSymptom();
      });               
    });
+   
+   $(document).on("pageshow","#pagefour",function(){
+	   //appendSelect($("#select3"),$("#select4"));
+	   //$("#select3").val('0');
+	   //$("#select4").val('0');
+   });
+   
+   $(document).on("pagecreate","#pagefive",function(){
+		 $("#pagefive a").click(function(){
+			 var position = $(this).attr("part");
+		     $link = "<%=request.getContextPath()%>/getSymptoms";
+		     $ul = $("#pagefour ul");
+		     $ul.empty();
+		     $ul.listview();
+		     $.post($link,
+		   		{
+		   			position:position
+		   		},	
+		   		function(data){
+			 		$.each(data, function(index, symptom){
+			   			$ul.append("<li data-icon='false' filter='"+symptom.room+"'>"+symptom.symptomName+"</li>");
+			   			$ul.listview("refresh");
+			 		});
+			 });
+		     //必须解绑之前绑定的事件
+			 $ul.undelegate();
+			 $ul.delegate('li','tap',changeColor);
+		 });         
+	   });
+   
+   var departmentData; 
+   function appendSelect(select1,select2){
+	   $link = "<%=request.getContextPath()%>/test";
+	   $.post($link,	
+   		function(data){
+		    departmentData = data;
+	 		var firstDepartmentHtml = "";
+	 		$.each(data, function(index, firstDepartment){
+	 			firstDepartmentHtml += "<option value=" + index + ">" + firstDepartment.name + "</option>";
+	 		});
+	 		select1.append(firstDepartmentHtml);
+	 		select1.selectmenu("refresh");
+	  });
+	  
+	   select1.bind("change",function(){
+		  var selectedFirstNumber = $("#"+select1.attr("id") + " :selected").val();
+		  if(departmentData[selectedFirstNumber].subDepartment!=null){
+			  var secondDepartmentHtml = "";
+			  var secondDepartmentList = departmentData[selectedFirstNumber].subDepartment;
+			  select2.empty();
+			  $.each(secondDepartmentList,function(index,secondDepartment){	
+					secondDepartmentHtml += "<option value=" + secondDepartment.name + ">" + secondDepartment.name + "</option>";
+				});
+			  select2.append(secondDepartmentHtml);
+		  }
+		  select2.selectmenu("refresh");
+	  });
+   }
+   
+   function filter(select1,select2,pagename){
+	  var select1Value = $("#"+select1+" :selected").html();
+	  var select2Value = $("#"+select2+" :selected").html();
+	  if(select1Value=="全部"){
+		  $("#"+pagename+" li").show();
+		  return;
+	  }
+	  $("#"+pagename+" li[filter]").hide();
+	  $("#"+pagename+" li[filter*="+select2Value+"]").show();
+   }
    
    function clonePartOneSymptom(){
    	   var $newli = $("#pagetwo .choose").clone();
@@ -216,16 +310,20 @@
    
    //为人体图(parttwo)添加点击事件
    $("map area").click(function(){
-      var id = $(this).attr("part");
-      $link = "<%=request.getContextPath()%>/getSymptoms?position=" + id;
+      var position = $(this).attr("part");
+      $link = "<%=request.getContextPath()%>/getSymptoms";
       $ul = $("#pagefour ul");
       $ul.empty();
       $ul.listview();
-      $.post($link,function(data){
- 		$.each(data, function(i, item){
-   			$ul.append("<li data-icon='false'>"+item+"</li>");
-   			$ul.listview("refresh");
- 		});
+      $.post($link,
+   		{
+   			position:position
+   		},	
+   		function(data){
+	 		$.each(data, function(index, symptom){
+	   			$ul.append("<li data-icon='false' filter='"+symptom.room+"'>"+symptom.symptomName+"</li>");
+	   			$ul.listview("refresh");
+	 		});
 	  });
 	  //必须解绑之前绑定的事件
 	  $ul.undelegate();
@@ -235,16 +333,21 @@
    //展开事件
    function expand(){
 	   	if($(this).hasClass("opened")){
-	     	return false;
+	     	return ;
 	     }
-	   	$link = "<%=request.getContextPath()%>/getSymptoms?position=" + $(this).attr("id");
+	   	$link = "<%=request.getContextPath()%>/getSymptoms";
 	   	$(this).addClass("opened");
 	   	var $ul = $(this).find("ul");
-	   	$.post($link,function(data){
-	 		$.each(data, function(i, item){
-	   			$ul.append("<li data-icon='false'>"+item+"</li>");
-	   			$ul.listview("refresh");
-	 		});
+	   	var position = $(this).attr('id');
+	   	$.post($link,
+	   		{
+	   			position:position
+	   		},	
+	   		function(data){
+		 		$.each(data, function(index, symptom){
+		   			$ul.append("<li data-icon='false' filter='"+symptom.room+"'>"+symptom.symptomName+"</li>");
+		   			$ul.listview("refresh");
+		 		});
 		});
 		$ul.delegate('li','tap',changeColor);
    }
