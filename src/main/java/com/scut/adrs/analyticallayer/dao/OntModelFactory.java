@@ -13,7 +13,7 @@ public class OntModelFactory {
 	public static final OntModel getOntModel() {
 		OntModel ontModel = ModelFactory
 				.createOntologyModel(OntModelSpec.OWL_MEM_TRANS_INF);
-		InputStream in = FileManager.get().open("11.25.owl");
+		InputStream in = FileManager.get().open("11.20.owl");
 		ontModel.read(in, null);
 		return ontModel;
 	}

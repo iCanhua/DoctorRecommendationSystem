@@ -14,9 +14,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.scut.adrs.analyticallayer.dao.SymptomDao;
 import com.scut.adrs.analyticallayer.dto.Question;
+import com.scut.adrs.analyticallayer.service.DoctorService;
 import com.scut.adrs.analyticallayer.service.SymptomService;
 import com.scut.adrs.domain.BodySigns;
+import com.scut.adrs.domain.Department;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Doctor;
 import com.scut.adrs.domain.Pathogeny;
@@ -25,7 +28,6 @@ import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.InterQuestion;
 import com.scut.adrs.recommendation.RecommendationProxy;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
-import com.scut.adrs.recommendation.service.DoctorService;
 import com.scut.adrs.util.QuestionUtil;
 import com.scut.adrs.util.SortUtil;
 import com.scut.adrs.util.ontDaoUtils;
@@ -44,6 +46,9 @@ public class RecommendController {
 	@Autowired
 	RecommendationProxy proxy;
 
+	@Autowired
+	SymptomDao symptomDao;
+
 	/**
 	 * 
 	 * @return 症状选择页面
@@ -59,9 +64,8 @@ public class RecommendController {
 	 */
 	@RequestMapping("/getSymptoms")
 	@ResponseBody
-	public List<String> getSymptoms(String position) {
-		List<String> symptoms = symptomService.getSymptomList("按" + position
-				+ "分");
+	public List<Symptom> getSymptoms(String position) {
+		List<Symptom> symptoms = symptomService.getSymptomList("按" + position + "分");
 		return symptoms;
 	}
 
@@ -74,8 +78,7 @@ public class RecommendController {
 	 * @return
 	 */
 	@RequestMapping("/questionListJsp")
-	public String questionListJsp(String symptoms, HttpSession session,
-			Model model) {
+	public String questionListJsp(String symptoms, HttpSession session, Model model) {
 		if (symptoms == null || symptoms.equals("")) {
 			return "redirect:/symptom";
 		}
@@ -91,15 +94,10 @@ public class RecommendController {
 		List<Question> questionList = new ArrayList<Question>();
 		try {
 			interQuestion = proxy.prediagnosis(patient);
-			questionList.addAll(QuestionUtil.getSymptomQuestion(interQuestion
-					.getHasSymptoms()));
-			questionList.addAll(QuestionUtil.getBodySigns(interQuestion
-					.getHasBodySigns()));
-			questionList.addAll(QuestionUtil.getPathogenyQuestion(interQuestion
-					.getHasPathogeny()));
-			questionList.addAll(QuestionUtil
-					.getMedicalHistoryQuestion(interQuestion
-							.getHasMedicalHistory()));
+			questionList.addAll(QuestionUtil.getSymptomQuestion(interQuestion.getHasSymptoms()));
+			questionList.addAll(QuestionUtil.getBodySigns(interQuestion.getHasBodySigns()));
+			questionList.addAll(QuestionUtil.getPathogenyQuestion(interQuestion.getHasPathogeny()));
+			questionList.addAll(QuestionUtil.getMedicalHistoryQuestion(interQuestion.getHasMedicalHistory()));
 		} catch (UnExistURIException e) {
 			e.printStackTrace();
 		}
@@ -117,8 +115,8 @@ public class RecommendController {
 	 * @return 推荐医生列表界面
 	 */
 	@RequestMapping("/recommendJsp")
-	public String recommendJsp(String symptoms, String bodySigns,
-			String pathogenys, String diseases, HttpSession session, Model model) {
+	public String recommendJsp(String symptoms, String bodySigns, String pathogenys, String diseases,
+			HttpSession session, Model model) {
 		String NS = ontDaoUtils.getNS();
 		patient = (Patient) session.getAttribute("patient");
 		if (patient == null) {
@@ -174,8 +172,7 @@ public class RecommendController {
 				diseaseAndIndex.entrySet());
 		SortUtil.disaseSort(diseaseList);
 		Map<Doctor, Float> result = proxy.doctorMatch(patient);
-		List<Map.Entry<Doctor, Float>> doctorList = new ArrayList<Map.Entry<Doctor, Float>>(
-				result.entrySet());
+		List<Map.Entry<Doctor, Float>> doctorList = new ArrayList<Map.Entry<Doctor, Float>>(result.entrySet());
 		SortUtil.doctorSort(doctorList);
 		for (Map.Entry<Disease, Float> entry : diseaseList) {
 			String uri = entry.getKey().getDiseaseName();
@@ -193,4 +190,24 @@ public class RecommendController {
 		session.removeAttribute("patient");
 		return "doctor";
 	}
+
+	/**
+	 * 
+	 * @param uri
+	 *            (医生的uri)
+	 * @return 医生详细信息
+	 */
+	@RequestMapping("/getDoctorDetails")
+	@ResponseBody
+	public Doctor getDoctorDetails(String name) {
+		Doctor doctor = doctorService.getDoctorData(name);
+		return doctor;
+	}
+
+	@RequestMapping("/test")
+	@ResponseBody
+	public List<Department> getTest(String position) {
+		return symptomDao.getRooms();
+	}
+
 }
