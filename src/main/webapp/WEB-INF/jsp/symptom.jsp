@@ -39,65 +39,8 @@
 			<input id="symptoms" name="symptoms" type="hidden" value=""/>
 			<input class="ui-btn" type="submit" value="诊断">
 		  </form>
-		
+
 		</div>
-
-<!-- 		<div data-role="page" id="pagetwo">
-		  <div data-role="header">
-		    <a href="#pagethree" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">人体图选择</a>
-		    <h1>医学词典</h1>
-		    <a href="#pageone" id="enter" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-icon-check ui-btn-icon-left">确定</a>
-		  </div>
-		  <div data-role="main">
-		   
-	        <select id="select1" data-native-menu="false">
-	        </select>
-	        
-	        <select id="select2" data-native-menu="false">
-	        </select>
-	      
-		    <div class="partone" data-role="collapsibleset">
-		      <div id="全身" data-role="collapsible">
-		        <h3>全身</h3>
-		        <ul data-role='listview'></ul>
-		      </div>
-		      <div id="四肢" data-role="collapsible">
-		        <h3>四肢</h3>
-		        <ul data-role='listview'></ul>
-		      </div>
-		      <div id="头部" data-role="collapsible">
-		        <h3>头部</h3>
-		        <ul data-role='listview'></ul>
-		      </div>
-		      <div id="胸部" data-role="collapsible">
-		        <h3>胸部</h3>
-		        <ul data-role='listview'></ul>
-		      </div>
-		      <div id="腰部" data-role="collapsible">
-		        <h3>腰部</h3>
-		        <ul data-role='listview'></ul>
-		      </div>
-		      <div id="腹部" data-role="collapsible">
-		        <h3>腹部</h3>
-		        <ul data-role='listview'></ul>
-		      </div>
-		      <div id="颈部" data-role="collapsible">
-		        <h3>颈部</h3>
-		        <ul data-role='listview'></ul>
-		      </div>
-		      <div id="排泄部位" data-role="collapsible">
-		        <h3>排泄部位</h3>
-		        <ul data-role='listview'></ul>
-		      </div>
-		      <div id="生殖部位" data-role="collapsible">
-		        <h3>生殖部位</h3>
-		        <ul data-role='listview'></ul>
-		      </div>
-		    </div>
-		  </div>
-		</div> -->
-
-
 
 		<div data-role="page" id="pagefour">
 			<div data-role="header">
@@ -119,6 +62,22 @@
 					<ul data-role="listview">
 					</ul>
 				</div>
+			</div>
+			
+			<div data-role="popup" id="detailDialog">
+			  <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn ui-icon-delete ui-btn-icon-notext ui-btn-right">关闭</a>
+		      <div data-role="header">
+		        <h1 id="name"></h1>
+		      </div>
+		
+		      <div data-role="main" class="ui-content">
+		        <p id="comment"></p>
+		      </div>
+
+			</div>
+			
+			<div data-role="footer">
+			    <h1>长按症状查看详情</h1>
 			</div>
 		</div>
 		
@@ -189,14 +148,7 @@
 		</map>
 <script>
    
-/*    $(document).on("pagecreate","#pagetwo",function(){
-	 appendSelect($("#select1"),$("#select2"));
-     //添加到已选择的症状列表(列表页面)
-     $("#pagetwo #enter").on("tap",function(){
-       clonePartOneSymptom();
-     });                
-   }); */
-   
+   //人体热点图
    $(document).on("pagecreate","#pagethree",function(){
 		$("#pic").rwdImageMaps();             
    });
@@ -205,16 +157,19 @@
 	 appendSelect($("#select3"),$("#select4"));
      //添加到已选择的症状列表(人体图页面)
      $("#pagefour #enter").on("tap",function(){
-       clonePartTwoSymptom();
+    	 cloneSymptom();
+    	 //必须解绑之前绑定的事件
+		 $("#symptom").undelegate();
+		 $("#symptom").delegate('li','swiperight',test);
      });               
    });
    
-   $(document).on("pageshow","#pagefour",function(){
-	   //appendSelect($("#select3"),$("#select4"));
-	   //$("#select3").val('0');
-	   //$("#select4").val('0');
-   });
+   function test(){
+	   $(this).remove();
+	   refreshForm();
+   }
    
+   //列表选择页面
    $(document).on("pagecreate","#pagefive",function(){
 		 $("#pagefive a").click(function(){
 			 var position = $(this).attr("part");
@@ -228,16 +183,18 @@
 		   		},	
 		   		function(data){
 			 		$.each(data, function(index, symptom){
-			   			$ul.append("<li data-icon='false' filter='"+symptom.room+"'>"+symptom.symptomName+"</li>");
+			 			$ul.append("<li data-icon='false' filter='"+symptom.room+"' comment='"+symptom.comment+"'>"+symptom.symptomName+"</li>");
 			   			$ul.listview("refresh");
 			 		});
 			 });
 		     //必须解绑之前绑定的事件
 			 $ul.undelegate();
 			 $ul.delegate('li','tap',changeColor);
+			 $ul.delegate('li','taphold',showDetail); 
 		 });         
 	   });
    
+   //筛选下拉框
    var departmentData; 
    function appendSelect(select1,select2){
 	   $link = "<%=request.getContextPath()%>/test";
@@ -278,16 +235,7 @@
 	  $("#"+pagename+" li[filter*="+select2Value+"]").show();
    }
    
-   function clonePartOneSymptom(){
-   	   var $newli = $("#pagetwo .choose").clone();
-       $newli.css("background-color","#FFFFFF");
-       $newli.css("color","#333333");
-       $newli.removeClass("choose");
-       $("#symptom").append($newli);
-       refreshForm();
-   }
-   
-    function clonePartTwoSymptom(){
+    function cloneSymptom(){
    	   var $newli = $("#pagefour .choose").clone();
        $newli.css("background-color","#FFFFFF");
        $newli.css("color","#333333");
@@ -304,10 +252,7 @@
 	   });
 	   $("#symptoms").attr("value",$symptom);
    }
-   
-   //为列表(partone)折叠块添加展开事件，动态添加症状
-   $(".partone div").on("collapsibleexpand",expand);
-   
+     
    //为人体图(parttwo)添加点击事件
    $("map area").click(function(){
       var position = $(this).attr("part");
@@ -321,36 +266,15 @@
    		},	
    		function(data){
 	 		$.each(data, function(index, symptom){
-	   			$ul.append("<li data-icon='false' filter='"+symptom.room+"'>"+symptom.symptomName+"</li>");
+	   			$ul.append("<li data-icon='false' filter='"+symptom.room+"' comment='"+symptom.comment+"'>"+symptom.symptomName+"</li>");
 	   			$ul.listview("refresh");
 	 		});
 	  });
 	  //必须解绑之前绑定的事件
 	  $ul.undelegate();
 	  $ul.delegate('li','tap',changeColor);
-   }); 
-   
-   //展开事件
-   function expand(){
-	   	if($(this).hasClass("opened")){
-	     	return ;
-	     }
-	   	$link = "<%=request.getContextPath()%>/getSymptoms";
-	   	$(this).addClass("opened");
-	   	var $ul = $(this).find("ul");
-	   	var position = $(this).attr('id');
-	   	$.post($link,
-	   		{
-	   			position:position
-	   		},	
-	   		function(data){
-		 		$.each(data, function(index, symptom){
-		   			$ul.append("<li data-icon='false' filter='"+symptom.room+"'>"+symptom.symptomName+"</li>");
-		   			$ul.listview("refresh");
-		 		});
-		});
-		$ul.delegate('li','tap',changeColor);
-   }
+	  $ul.delegate('li','taphold',showDetail); 
+   });
    
    //改变li颜色
    function changeColor(){
@@ -367,7 +291,15 @@
     }
    }
    
-   
+   function showDetail(){
+	   $("#detailDialog #name").html($(this).html());
+	   if($(this).attr("comment") != "null"){
+	   	 $("#detailDialog #comment").html($(this).attr("comment"));
+	   }else{
+		 $("#detailDialog #comment").html("&nbsp;&nbsp;&nbsp;该症状暂无描述&nbsp;&nbsp;&nbsp;"); 
+	   }
+	   $("#detailDialog").popup("open");
+   }
   
    $("#side").click(function(){
    	if($(this).attr("side")=="正面"){

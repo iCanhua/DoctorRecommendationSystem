@@ -46,6 +46,7 @@ public class SymptomDao {
 			Symptom symptom = new Symptom();
 			OntClass clazz = i.next();
 			symptom.setSymptomName(clazz.getURI().split("#")[1]);
+			symptom.setComment(clazz.getComment(null));
 			Set<String> verbs = new HashSet<String>();
 			verbs.add("是症状");
 			Map<String, Set<String>> ontClassRestriction = OntModelUtil.getOntClassRestriction(clazz, verbs);
