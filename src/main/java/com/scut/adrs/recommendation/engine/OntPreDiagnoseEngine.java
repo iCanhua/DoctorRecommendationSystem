@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.Restriction;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,10 +52,18 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
     	Set<Disease> interDisease=new HashSet<Disease>();
     	for(Restriction re:reList){
     		if(re.isAllValuesFromRestriction()){
-    			interDiseaseName.add(re.asAllValuesFromRestriction().getAllValuesFrom().getURI());
+    			 Resource resource=re.asAllValuesFromRestriction().getAllValuesFrom();
+    			 if(resource.as(OntClass.class).hasSuperClass(ontParserDao.getModel().getOntClass(ontParserDao.NS+"疾病及综合症"))){
+    				 interDiseaseName.add(re.asAllValuesFromRestriction().getAllValuesFrom().getURI());	 
+    			 }
+    			
     		}
     		if(re.isSomeValuesFromRestriction()){
-    			interDiseaseName.add(re.asSomeValuesFromRestriction().getSomeValuesFrom().getURI());
+    			Resource resource=re.asSomeValuesFromRestriction().getSomeValuesFrom();
+    			if(resource.as(OntClass.class).hasSuperClass(ontParserDao.getModel().getOntClass(ontParserDao.NS+"疾病及综合症"))){
+    				interDiseaseName.add(re.asSomeValuesFromRestriction().getSomeValuesFrom().getURI());
+   			 	}
+    				
     		}
     	}
     	for(String rdf:interDiseaseName){
@@ -70,21 +79,27 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
 	 */
 	@Override
 	public Set<Symptom> getRelativeSymptomByDisease(Disease disease) {
-		String property="是表现";
+		String property="是症状";
     	//找到对应的所有约束
     	Set<Restriction> reSet=this.ontParserDao.getRestriction(property, disease.getDiseaseName());
     	//存放所有约束相关的子类的集合
     	Set<OntClass> ontClassSet = new HashSet<OntClass>();
     	//存放要构造成交互症状的集合
     	Set<Symptom> interSymptom=new HashSet<Symptom>();
+    	//System.out.println("大小"+reSet.size());
     	 for (Restriction re : reSet) {
     		 ontClassSet.addAll(ontParserDao.getSubClass(re));
          }
     	 //开始构造交互症状
     	String symptomURI=NS+"症状";
     	for(OntClass ontclass:ontClassSet){
-    		if(isSuperClass(symptomURI, ontclass)){
+//    		if(isSuperClass(symptomURI, ontclass)){
+//    			interSymptom.add(new Symptom(ontclass.getURI()));
+//    		}
+    		//System.out.println("外"+ontclass.getLocalName());
+    		if(ontclass.hasSuperClass(ontParserDao.getModel().getOntClass(symptomURI))){
     			interSymptom.add(new Symptom(ontclass.getURI()));
+    			//System.out.println(ontclass.getLocalName());
     		}
     	}
     	return interSymptom;
@@ -110,7 +125,10 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
     	 //开始构造交互病因
     	 String pathgenyURI=NS+"病因";
     	for(OntClass ontclass:ontClassSet){
-    		if(isSuperClass(pathgenyURI, ontclass)){
+//    		if(isSuperClass(pathgenyURI, ontclass)){
+//    			interPathogeny.add(new Pathogeny(ontclass.getURI()));
+//    		}
+    		if(ontclass.hasSuperClass(ontParserDao.getModel().getOntClass(pathgenyURI))){
     			interPathogeny.add(new Pathogeny(ontclass.getURI()));
     		}
     	}
@@ -138,7 +156,10 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
     	//开始构造交互疾病
     	String diseaseURI=NS+"疾病及综合症";
     	for(OntClass ontclass:ontClassSet){
-    		if(isSuperClass(diseaseURI, ontclass)){
+//    		if(isSuperClass(diseaseURI, ontclass)){
+//    			interDisease.add(new Disease(ontclass.getURI()));
+//    		}
+    		if(ontclass.hasSuperClass(ontParserDao.getModel().getOntClass(diseaseURI))){
     			interDisease.add(new Disease(ontclass.getURI()));
     		}
     	}
@@ -151,7 +172,7 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
 	 */
 	@Override
 	public Set<BodySigns> getRelativeBodySignsByDisease(Disease disease) {
-		String property="是表现";
+		String property="是体征";
     	//找到对应的所有约束
     	Set<Restriction> reSet=this.ontParserDao.getRestriction(property, disease.getDiseaseName());
     	//存放所有约束相关的子类的集合
@@ -164,15 +185,18 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
     	 //开始构造交互体征
     	String bodySignsURI=NS+"体征";
     	for(OntClass ontclass:ontClassSet){
-    		boolean finded=false;
-    		ExtendedIterator<OntClass> iterator=ontclass.listSuperClasses(false);
-    		while(iterator.hasNext()){
-    			OntClass superClass=(OntClass) iterator.next();
-    			if(bodySignsURI.equals(superClass.getURI())){
-    				finded=true;
-    			}
-    		}
-    		if(finded==true){
+//    		boolean finded=false;
+//    		ExtendedIterator<OntClass> iterator=ontclass.listSuperClasses(false);
+//    		while(iterator.hasNext()){
+//    			OntClass superClass=(OntClass) iterator.next();
+//    			if(bodySignsURI.equals(superClass.getURI())){
+//    				finded=true;
+//    			}
+//    		}
+//    		if(finded==true){
+//    			interBodySigns.add(new BodySigns(ontclass.getURI()));
+//    		}
+    		if(ontclass.hasSuperClass(ontParserDao.getModel().getOntClass(bodySignsURI))){
     			interBodySigns.add(new BodySigns(ontclass.getURI()));
     		}
     	}
@@ -185,15 +209,15 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
 	 * @param ontClass
 	 * @return
 	 */
-	private boolean isSuperClass(String superURI,OntClass ontClass){
-		boolean finded=false;
-		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
-		while(iterator.hasNext()){
-			OntClass superClass=(OntClass) iterator.next();
-			if(superURI.equals(superClass.getURI())){
-				finded=true;
-			}
-		}
-		return finded;
-	}
+//	private boolean isSuperClass(String superURI,OntClass ontClass){
+//		boolean finded=false;
+//		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
+//		while(iterator.hasNext()){
+//			OntClass superClass=(OntClass) iterator.next();
+//			if(superURI.equals(superClass.getURI())){
+//				finded=true;
+//			}
+//		}
+//		return finded;
+//	}
 }
