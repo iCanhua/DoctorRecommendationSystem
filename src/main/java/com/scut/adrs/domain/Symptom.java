@@ -11,6 +11,7 @@ public class Symptom implements Resourse {
 	 */
 	String symptomName; // RDF名字
 	Set<String> room;
+	String comment;
 
 	public Symptom() {
 
@@ -39,6 +40,14 @@ public class Symptom implements Resourse {
 
 	public void setRoom(Set<String> room) {
 		this.room = room;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	// 重写该方法，便于加入相同的症状
