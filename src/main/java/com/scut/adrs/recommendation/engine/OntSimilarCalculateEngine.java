@@ -45,7 +45,10 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 			Iterator<OntClass> itor=ralativSet.iterator();
 			while (itor.hasNext()) {
 				OntClass temp = itor.next();
-				if(!this.isSuperClass(ontParserDao.NS+"疾病及综合症", temp)){
+//				if(!this.isSuperClass(ontParserDao.NS+"疾病及综合症", temp)){
+//					itor.remove();
+//				}
+				if(!temp.hasSuperClass(ontParserDao.getModel().getOntClass(ontParserDao.NS+"疾病及综合症"))){
 					itor.remove();
 				}
 			}
@@ -156,17 +159,17 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 	 * @param ontClass
 	 * @return
 	 */
-	private boolean isSuperClass(String superURI,OntClass ontClass){
-		boolean finded=false;
-		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
-		while(iterator.hasNext()){
-			OntClass superClass=(OntClass) iterator.next();
-			if(superURI.equals(superClass.getURI())){
-				finded=true;
-			}
-		}
-		return finded;
-	}
+//	private boolean isSuperClass(String superURI,OntClass ontClass){
+//		boolean finded=false;
+//		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
+//		while(iterator.hasNext()){
+//			OntClass superClass=(OntClass) iterator.next();
+//			if(superURI.equals(superClass.getURI())){
+//				finded=true;
+//			}
+//		}
+//		return finded;
+//	}
 	public static void main(String[] args) {
 		
 	}
