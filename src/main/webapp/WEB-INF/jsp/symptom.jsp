@@ -13,6 +13,7 @@
 	<body>
 		<div data-role="page" id="pagethree">
 			<div data-role="header">
+			   <a href="<%=request.getContextPath()%>/home" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left" data-ajax="false">返回主页</a>
 			   <h1>人体图</h1>
 			   <a href="#pagefive" id="enter" class="ui-btn ui-btn-right ui-corner-all ui-shadow ui-icon-bullets ui-btn-icon-left">列表选择</a>
 			</div>
@@ -35,11 +36,12 @@
 		    <ul data-role="listview" id="symptom">
 		    </ul>
 		  </div>
-		  <form id="form" action="<%=request.getContextPath()%>/questionListJsp" method="post" data-ajax="false">
+		  
+		  <form id="form" action="<%=request.getContextPath()%>/questionListJsp" method="post" data-ajax="false" onclick="diagnose();">
 			<input id="symptoms" name="symptoms" type="hidden" value=""/>
 			<input class="ui-btn" type="submit" value="诊断">
 		  </form>
-
+		  
 		</div>
 
 		<div data-role="page" id="pagefour">
@@ -66,6 +68,7 @@
 			
 			<div data-role="popup" id="detailDialog">
 			  <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn ui-icon-delete ui-btn-icon-notext ui-btn-right">关闭</a>
+			  
 		      <div data-role="header">
 		        <h1 id="name"></h1>
 		      </div>
@@ -160,11 +163,12 @@
     	 cloneSymptom();
     	 //必须解绑之前绑定的事件
 		 $("#symptom").undelegate();
-		 $("#symptom").delegate('li','swiperight',test);
+		 $("#symptom").delegate('li','swiperight',deleteChoose);
      });               
    });
    
-   function test(){
+   //向右滑删除选中的症状
+   function deleteChoose(){
 	   $(this).remove();
 	   refreshForm();
    }
@@ -197,7 +201,7 @@
    //筛选下拉框
    var departmentData; 
    function appendSelect(select1,select2){
-	   $link = "<%=request.getContextPath()%>/test";
+	   $link = "<%=request.getContextPath()%>/getRooms";
 	   $.post($link,	
    		function(data){
 		    departmentData = data;
@@ -299,6 +303,10 @@
 		 $("#detailDialog #comment").html("&nbsp;&nbsp;&nbsp;该症状暂无描述&nbsp;&nbsp;&nbsp;"); 
 	   }
 	   $("#detailDialog").popup("open");
+	   //为了避免重复点击，必须解绑再绑定
+	   $(this).parent("ul").undelegate();
+	   $(this).parent("ul").delegate('li','tap',changeColor);
+	   $(this).parent("ul").delegate('li','taphold',showDetail); 
    }
   
    $("#side").click(function(){
@@ -346,15 +354,10 @@
    //跳转到问题列表页面
    function diagnose(){
    	if($("#symptom li").length==0){
-   		alert("请选择至少一个症状");
+   		alert("请至少选择一个症状");
    		return false;
    	}
-   	$symptom = "";
-   	$("#symptom li").each(function(){
-   		$symptom += $(this).text()+",";
-   	});
-   	$("#symptoms").attr("value",$symptom);
-   	return true;
+   	$("#form").submit();
    }
    
  </script>

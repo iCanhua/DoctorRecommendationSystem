@@ -70,7 +70,7 @@
 						    </div>
 						    <div class="ui-grid-solo block">
 						      <div class="ui-block-a head">擅长</div>
-						      <div class="ui-block-a content" id="expert">冠心病</div>
+						      <div class="ui-block-a content" id="expert"></div>
 						    </div>
 						    <div class="ui-grid-solo block">
 						      <div class="ui-block-a head">门诊地址</div>

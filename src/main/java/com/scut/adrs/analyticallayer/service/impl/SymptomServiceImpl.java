@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.scut.adrs.analyticallayer.dao.SymptomDao;
 import com.scut.adrs.analyticallayer.service.SymptomService;
+import com.scut.adrs.domain.Department;
 import com.scut.adrs.domain.Symptom;
 
 @Service
@@ -19,5 +20,11 @@ public class SymptomServiceImpl implements SymptomService {
 	public List<Symptom> getSymptomList(String position) {
 		List<Symptom> list = symptomDao.getSymptomByPosition(position);
 		return list;
+	}
+
+	@Override
+	public List<Department> getRooms() {
+		List<Department> rooms = symptomDao.getRooms();
+		return rooms;
 	}
 }
