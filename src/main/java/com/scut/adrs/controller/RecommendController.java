@@ -8,15 +8,19 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import org.ansj.domain.Result;
+import org.ansj.domain.Term;
+import org.ansj.splitWord.analysis.DicAnalysis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.scut.adrs.analyticallayer.dao.SymptomDao;
 import com.scut.adrs.analyticallayer.dto.Question;
 import com.scut.adrs.analyticallayer.service.DoctorService;
+import com.scut.adrs.analyticallayer.service.PatientService;
+import com.scut.adrs.analyticallayer.service.SearchService;
 import com.scut.adrs.analyticallayer.service.SymptomService;
 import com.scut.adrs.domain.BodySigns;
 import com.scut.adrs.domain.Department;
@@ -25,10 +29,7 @@ import com.scut.adrs.domain.Doctor;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
-import com.scut.adrs.recommendation.InterQuestion;
 import com.scut.adrs.recommendation.RecommendationProxy;
-import com.scut.adrs.recommendation.exception.UnExistURIException;
-import com.scut.adrs.util.QuestionUtil;
 import com.scut.adrs.util.SortUtil;
 import com.scut.adrs.util.ontDaoUtils;
 
@@ -44,10 +45,18 @@ public class RecommendController {
 	DoctorService doctorService;
 
 	@Autowired
+	PatientService patientService;
+
+	@Autowired
 	RecommendationProxy proxy;
 
 	@Autowired
-	SymptomDao symptomDao;
+	SearchService searchService;
+
+	@RequestMapping("/home")
+	public String home() {
+		return "home";
+	}
 
 	/**
 	 * 
@@ -56,6 +65,16 @@ public class RecommendController {
 	@RequestMapping("/symptom")
 	public String symptom() {
 		return "symptom";
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @Description 有问必答搜索页面
+	 */
+	@RequestMapping("/search")
+	public String search() {
+		return "search";
 	}
 
 	/**
@@ -90,17 +109,7 @@ public class RecommendController {
 		}
 		Patient patient = new Patient();
 		patient.setHasSymptoms(symptomSet);
-		InterQuestion interQuestion = null;
-		List<Question> questionList = new ArrayList<Question>();
-		try {
-			interQuestion = proxy.prediagnosis(patient);
-			questionList.addAll(QuestionUtil.getSymptomQuestion(interQuestion.getHasSymptoms()));
-			questionList.addAll(QuestionUtil.getBodySigns(interQuestion.getHasBodySigns()));
-			questionList.addAll(QuestionUtil.getPathogenyQuestion(interQuestion.getHasPathogeny()));
-			questionList.addAll(QuestionUtil.getMedicalHistoryQuestion(interQuestion.getHasMedicalHistory()));
-		} catch (UnExistURIException e) {
-			e.printStackTrace();
-		}
+		List<Question> questionList = patientService.getQuestionByPatient(patient);
 		model.addAttribute("questions", questionList);
 		session.setAttribute("patient", patient);
 		return "question";
@@ -155,18 +164,6 @@ public class RecommendController {
 			patient.getHasMedicalHistory().addAll(diseaseSet);
 		}
 		proxy.diagnose(patient);
-		// for (Symptom symptom : patient.getHasSymptoms()) {
-		// System.out.println(symptom.getSymptomName());
-		// }
-		// for (BodySigns bodySign : patient.getHasBodySigns()) {
-		// System.out.println(bodySign.getBodySignName());
-		// }
-		// for (Disease disease : patient.getHasMedicalHistory()) {
-		// System.out.println(disease.getDiseaseName());
-		// }
-		// for (Pathogeny pathogeny : patient.getHasPathogeny()) {
-		// System.out.println(pathogeny.getPathogenyName());
-		// }
 		Map<Disease, Float> diseaseAndIndex = patient.getDiseaseAndIndex();
 		List<Map.Entry<Disease, Float>> diseaseList = new ArrayList<Map.Entry<Disease, Float>>(
 				diseaseAndIndex.entrySet());
@@ -204,10 +201,45 @@ public class RecommendController {
 		return doctor;
 	}
 
-	@RequestMapping("/test")
+	/**
+	 * 
+	 * @param position
+	 * @return
+	 * @Description 获取科室及其子科室
+	 */
+	@RequestMapping("/getRooms")
 	@ResponseBody
-	public List<Department> getTest(String position) {
-		return symptomDao.getRooms();
+	public List<Department> getRooms(String position) {
+		return symptomService.getRooms();
+	}
+
+	/**
+	 * 
+	 * @param sickness
+	 * @param symptom
+	 * @param model
+	 * @param session
+	 * @return
+	 * @throws Exception
+	 * @Description 对输入的文本进行分词，并提交问题
+	 */
+	@RequestMapping("/searchSubmit")
+	public String searchSubmit(String sickness, String symptom, Model model, HttpSession session) throws Exception {
+		Result result = DicAnalysis.parse(sickness + "," + symptom);
+		List<Term> terms = result.getTerms();
+		HashSet<String> infos = new HashSet<>();
+		for (int i = 0; i < terms.size(); i++) {
+			String word = terms.get(i).getName(); // 拿到词
+			infos.add(word);
+		}
+		Patient patient = searchService.searchInfo(infos);
+		List<Question> questionList = patientService.getQuestionByPatient(patient);
+		if (questionList.size() == 0) {
+			return "error";
+		}
+		model.addAttribute("questions", questionList);
+		session.setAttribute("patient", patient);
+		return "question";
 	}
 
 }

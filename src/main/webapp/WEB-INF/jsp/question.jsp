@@ -25,7 +25,7 @@
 	<body>
 	    <div data-role="page" id="pageone">
 	      <div data-role="header">
-	        <a href="/symptom" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left" data-ajax="false">返回</a>
+	        <a href="<%=request.getContextPath()%>/home" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left" data-ajax="false">返回主页</a>
 	        <h1>问题(<span id="nowNumber">1</span>/<span id="allNumber">${fn:length(questions)}</span>)</h1>
 	      </div>
 	      <div data-role="main" class="ui-content">
@@ -92,40 +92,50 @@
 	  
 	  //初始化分页
 	  function start(){
-		  $("fieldset").hide();
-		  $("fieldset[index=1]").show();
-		  $("#previous").attr("disabled","true");
-		  $("#submit").parent("div").css('display','none');
+		  modify(parseInt($("#nowNumber").html()));
 	  }
 	  
 	  function previousPage(){
-		  var nowNumber = $("#nowNumber").html();
+		  var nowNumber = parseInt($("#nowNumber").html());
 		  $("#nowNumber").html(nowNumber-1);
-		  changePage($("#nowNumber").html());
+		  modify(parseInt($("#nowNumber").html()));
 	  }
 	  
 	  function nextPage(){
 		  var nowNumber = parseInt($("#nowNumber").html());
 		  $("#nowNumber").html(nowNumber+1);
-		  changePage($("#nowNumber").html());
+		  modify(parseInt($("#nowNumber").html()));
 	  }
-	  	  
-	  function changePage(nowNumber){
-		  var allNumber = $("#allNumber").html();
+	  
+	  function modify(nowNumber){
+		  var allNumber = parseInt($("#allNumber").html());
 		  $("fieldset").hide();
 		  $("fieldset[index="+nowNumber+"]").show();
-		  if(nowNumber==1){
-			  $("#previous").attr("disabled","true");
-			  return;
-		  }
 		  if(nowNumber==allNumber){
-			  $("#next").attr("disabled","true");
-			  $("#submit").parent("div").css('display','block');
-			  return;
+			  if(nowNumber==1){
+				  $("#previous").attr("disabled","true");
+				  $("#next").attr("disabled","true");
+				  $("#submit").parent("div").css('display','block');
+				  return;
+			  }
+			  if(nowNumber>1){
+				  $("#previous").removeAttr("disabled");
+				  $("#next").attr("disabled","true");
+				  $("#submit").parent("div").css('display','block');
+				  return;
+			  }
 		  }
-		  $("#submit").parent("div").css('display','none');
-		  $("#previous").removeAttr("disabled");
-		  $("#next").removeAttr("disabled");
+		  if(nowNumber<allNumber){
+			  if(nowNumber==1){
+				  $("#previous").attr("disabled","true");
+				  $("#next").removeAttr("disabled");
+				  $("#submit").parent("div").css('display','none');
+			  }else{
+				  $("#previous").removeAttr("disabled");
+				  $("#next").removeAttr("disabled");
+				  $("#submit").parent("div").css('display','none');
+			  }
+		  }
 	  }
 	  
 	  $(document).on("pagecreate","#pageone",function(){
