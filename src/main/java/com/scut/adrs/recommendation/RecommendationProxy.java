@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.scut.adrs.domain.BodySigns;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Doctor;
+import com.scut.adrs.domain.InterQuestion;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;

@@ -23,6 +23,10 @@ public class SymptomServiceImpl implements SymptomService {
 	}
 
 	@Override
+	
+	
+	
+	
 	public List<Department> getRooms() {
 		List<Department> rooms = symptomDao.getRooms();
 		return rooms;

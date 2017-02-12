@@ -2,7 +2,7 @@ package com.scut.adrs.domain;
 
 import java.util.Set;
 
-public class Doctor implements Resourse {
+public class Doctor extends AbstractConcept {
 	// 用URI表示其唯一实例
 
 	// 医生名字
@@ -26,22 +26,6 @@ public class Doctor implements Resourse {
 		name = doctorName;
 	}
 
-	// 重写该方法，便于加入相同的症状
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Doctor)) {
-			return false;
-		} else {
-			Doctor sp = (Doctor) obj;
-			if (sp.getName().equals(this.getName())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public int hashCode() {
-		return this.getName().hashCode();
-	}
 
 	@Override
 	public String getIRI() {
@@ -95,6 +79,12 @@ public class Doctor implements Resourse {
 
 	public void setSexpert(Set<String> sexpert) {
 		this.sexpert = sexpert;
+	}
+
+	@Override
+	public String getDomainType() {
+		// TODO Auto-generated method stub
+		return "医生";
 	}
 
 }

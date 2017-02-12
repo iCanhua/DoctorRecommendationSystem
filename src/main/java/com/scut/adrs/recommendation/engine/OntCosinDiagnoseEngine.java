@@ -16,7 +16,7 @@ import com.scut.adrs.domain.BodySigns;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
-import com.scut.adrs.domain.Resourse;
+import com.scut.adrs.domain.Resource;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.dao.OntParserDao;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
@@ -106,9 +106,9 @@ public class OntCosinDiagnoseEngine implements DiagnoseKnowledgeEngine{
 		//System.out.println("未转化的的余弦相似度："+sim);
 		return sim;
 	}
-	private ArrayList<String>  constructStrArray(Set<? extends Resourse> resourse){
+	private ArrayList<String>  constructStrArray(Set<? extends Resource> resourse){
 		ArrayList<String> array=new ArrayList<String>();
-		for(Resourse re:resourse){
+		for(Resource re:resourse){
 			array.add(re.getIRI());
 		}
 		return array;

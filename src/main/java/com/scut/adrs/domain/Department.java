@@ -2,7 +2,7 @@ package com.scut.adrs.domain;
 
 import java.util.List;
 
-public class Department implements Resourse {
+public class Department extends AbstractConcept {
 
 	@Override
 	public String getIRI() {
@@ -27,6 +27,12 @@ public class Department implements Resourse {
 
 	public void setSubDepartment(List<Department> sonDepartment) {
 		this.subDepartment = sonDepartment;
+	}
+
+	@Override
+	public String getDomainType() {
+		// TODO Auto-generated method stub
+		return "部门";
 	}
 
 }

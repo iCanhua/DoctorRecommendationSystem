@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class Patient implements Resourse{
+public class Patient extends AbstractConcept{
 
 	private String name;
 	private String sex;
@@ -117,6 +117,12 @@ public class Patient implements Resourse{
 
 	@Override
 	public String getIRI() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDomainType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
