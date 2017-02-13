@@ -5,11 +5,12 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class DicInsertUtil {
 	private static Logger logger = Logger.getLogger(DicInsertUtil.class);
 	private static String NS = "http://www.semanticweb.org/fan/ontologies/2016/7/untitled-ontology-26#";
-
+	@Autowired
 	OntModel myOntModel;
 
 	public DicInsertUtil() {

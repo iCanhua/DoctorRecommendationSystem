@@ -32,6 +32,7 @@ import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.RecommendationProxy;
 import com.scut.adrs.util.SortUtil;
 import com.scut.adrs.util.ontDaoUtils;
+import com.scut.adrs.nlcomprehension.*;
 
 @Controller
 public class RecommendController {
@@ -52,6 +53,8 @@ public class RecommendController {
 
 	@Autowired
 	SearchService searchService;
+	@Autowired
+	DescriptionComprehension descriptionComprehension;
 
 	@RequestMapping("/home")
 	public String home() {
@@ -225,7 +228,7 @@ public class RecommendController {
 	 */
 	@RequestMapping("/searchSubmit")
 	public String searchSubmit(String sickness, String symptom, Model model, HttpSession session) throws Exception {
-		Result result = DicAnalysis.parse(sickness + "," + symptom);
+		Result result = descriptionComprehension.parse(sickness + "," + symptom);
 		List<Term> terms = result.getTerms();
 		HashSet<String> infos = new HashSet<>();
 		for (int i = 0; i < terms.size(); i++) {

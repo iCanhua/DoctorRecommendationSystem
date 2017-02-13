@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.apache.jena.ontology.OntClass;
 
-public class BodySigns implements Resourse{
+public class BodySigns extends AbstractConcept{
 	/**
 	 * 一般用RDF表示
 	 */
@@ -24,24 +24,6 @@ public class BodySigns implements Resourse{
 		this.bodySignName = bodySignName;
 	}
 
-
-	//重写该方法，便于加入相同的症状
-	public boolean equals(Object obj){
-		if(!(obj instanceof BodySigns)){
-			return false;
-		}else{
-			BodySigns bs=(BodySigns)obj;
-			if(bs.getBodySignName().equals(this.bodySignName)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public int hashCode(){  
-	    return this.bodySignName.hashCode();
-	}
-	
 	public static void main(String[] args) {
 		BodySigns a=new BodySigns("123");
 		BodySigns b=new BodySigns("123");
@@ -55,6 +37,12 @@ public class BodySigns implements Resourse{
 	public String getIRI() {
 		// TODO Auto-generated method stub
 		return this.bodySignName;
+	}
+
+	@Override
+	public String getDomainType() {
+		// TODO Auto-generated method stub
+		return "体征";
 	}
 	
 	

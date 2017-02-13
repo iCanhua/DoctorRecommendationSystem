@@ -10,7 +10,7 @@
 	<context:component-scan base-package="com.scut.adrs" />
 	<!--从doctor.owl中提取model-->  
     <bean id="myOntModel" name="myOntModel" class="com.scut.adrs.util.ontDaoUtils" factory-method="getModel"></bean> 
-    <bean id="consinEngine" class="com.scut.adrs.recommendation.engine.OntCosinDiagnoseEngine" ></bean> 
+    <bean id="consinEngine" class="com.scut.adrs.recommendation.engine.OntCosinDiagnoseEngine" ></bean>
     <bean id="diagnoseEngine" class="com.scut.adrs.recommendation.engine.OntDiagnoseEngine" ></bean>
     <!--注入自定义词典  -->
     <bean name="myDic" class="com.scut.adrs.util.DicInsertUtil">

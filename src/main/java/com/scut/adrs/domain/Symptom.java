@@ -5,18 +5,16 @@ import java.util.Set;
 
 import org.apache.jena.ontology.OntClass;
 
-public class Symptom implements Resourse {
+public class Symptom extends AbstractConcept {
 	/**
 	 * 一般用RDF表示
 	 */
 	String symptomName; // RDF名字
 	Set<String> room;
 	String comment;
-
 	public Symptom() {
 
 	}
-
 	public Symptom(String uri) {
 		super();
 		this.symptomName = uri;
@@ -50,22 +48,6 @@ public class Symptom implements Resourse {
 		this.comment = comment;
 	}
 
-	// 重写该方法，便于加入相同的症状
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Symptom)) {
-			return false;
-		} else {
-			Symptom sp = (Symptom) obj;
-			if (sp.getSymptomName().equals(this.symptomName)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public int hashCode() {
-		return this.symptomName.hashCode();
-	}
 
 	public static void main(String[] args) {
 		Symptom a = new Symptom("123");
@@ -73,13 +55,19 @@ public class Symptom implements Resourse {
 		Set<Symptom> set = new HashSet<Symptom>();
 		set.add(b);
 		set.add(a);
-		System.out.println("大小" + set.size());
+		System.out.println("症状大小" + set.size());
 	}
 
 	@Override
 	public String getIRI() {
 		// TODO Auto-generated method stub
 		return this.symptomName;
+	}
+
+	@Override
+	public String getDomainType() {
+		// TODO Auto-generated method stub
+		return "症状";
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.scut.adrs.domain;
 
-public class Disease implements Resourse{
+public class Disease extends AbstractConcept{
 	/**
 	 * 一般用RDF表示
 	 */
@@ -28,27 +28,14 @@ public class Disease implements Resourse{
 		this.diseaseName = diseaseName;
 	}
 
-	// 重写该方法，便于加入相同的症状
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Disease)) {
-			return false;
-		} else {
-			Disease sp = (Disease) obj;
-			if (sp.getDiseaseName().equals(this.getDiseaseName())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public int hashCode() {
-		return this.diseaseName.hashCode();
-	}
-
 	@Override
 	public String getIRI() {
-		// TODO Auto-generated method stub
 		return this.diseaseName;
 	}
 
+	@Override
+	public String getDomainType() {
+		
+		return "疾病及综合症";
+	}
 }

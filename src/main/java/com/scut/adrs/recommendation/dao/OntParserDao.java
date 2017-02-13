@@ -194,7 +194,6 @@ public class OntParserDao{
 		return finded;
 	}
 
-
     
 
 	public static void main(String[] args) {
