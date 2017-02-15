@@ -23,32 +23,47 @@ public class SearchServiceImpl implements SearchService {
 	public OntModel myOntModel;
 
 	@Override
-	public Patient searchInfo(Set<String> infos) {
-		OntClass rootSymptom = myOntModel.getOntClass(NS + "症状");
-		OntClass rootBodySigns = myOntModel.getOntClass(NS + "体征");
-		OntClass rootPathogeny = myOntModel.getOntClass(NS + "病因");
-		OntClass rootDisease = myOntModel.getOntClass(NS + "疾病及综合症");
+	public Patient buildPatient(String[] symptoms, String[] bodySigns, String[] pathogeny, String[] medicalHistory)
+			throws Exception {
+		Patient patient = new Patient();
 		Set<Symptom> hasSymptoms = new HashSet<>();
 		Set<BodySigns> hasBodySigns = new HashSet<>();
 		Set<Pathogeny> hasPathogeny = new HashSet<>();
 		Set<Disease> hasMedicalHistory = new HashSet<>();
-		Patient patient = new Patient();
-		for (String info : infos) {
-			OntClass clazz = myOntModel.getOntClass(NS + info);
-			if (clazz == null) {
-				continue;
+		if (symptoms != null) {
+			for (String str : symptoms) {
+				OntClass symptomOntClazz = myOntModel.getOntClass(str);
+				if (symptomOntClazz == null) {
+					throw new Exception("该症状本体类不存在");
+				}
+				hasSymptoms.add(new Symptom(str));
 			}
-			if (clazz.hasSuperClass(rootSymptom)) {
-				hasSymptoms.add(new Symptom(NS + info));
+		}
+		if (bodySigns != null) {
+			for (String str : bodySigns) {
+				OntClass bodySignsOntClazz = myOntModel.getOntClass(str);
+				if (bodySignsOntClazz == null) {
+					throw new Exception("该体征本体类不存在");
+				}
+				hasBodySigns.add(new BodySigns(str));
 			}
-			if (clazz.hasSuperClass(rootBodySigns)) {
-				hasBodySigns.add(new BodySigns(NS + info));
+		}
+		if (pathogeny != null) {
+			for (String str : pathogeny) {
+				OntClass pathogenyOntClazz = myOntModel.getOntClass(str);
+				if (pathogenyOntClazz == null) {
+					throw new Exception("该病因本体类不存在");
+				}
+				hasPathogeny.add(new Pathogeny(str));
 			}
-			if (clazz.hasSuperClass(rootPathogeny)) {
-				hasPathogeny.add(new Pathogeny(NS + info));
-			}
-			if (clazz.hasSuperClass(rootDisease)) {
-				hasMedicalHistory.add(new Disease(NS + info));
+		}
+		if (medicalHistory != null) {
+			for (String str : medicalHistory) {
+				OntClass medicalHistoryOntClazz = myOntModel.getOntClass(str);
+				if (medicalHistoryOntClazz == null) {
+					throw new Exception("该疾病本体类不存在");
+				}
+				hasMedicalHistory.add(new Disease(str));
 			}
 		}
 		patient.getHasSymptoms().addAll(hasSymptoms);
