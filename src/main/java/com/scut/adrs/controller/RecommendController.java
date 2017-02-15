@@ -8,9 +8,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import org.ansj.domain.Result;
-import org.ansj.domain.Term;
-import org.ansj.splitWord.analysis.DicAnalysis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,10 +26,11 @@ import com.scut.adrs.domain.Doctor;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
+import com.scut.adrs.nlcomprehension.DescriptionComprehension;
+import com.scut.adrs.nlcomprehension.InterConceptQuestion;
 import com.scut.adrs.recommendation.RecommendationProxy;
 import com.scut.adrs.util.SortUtil;
 import com.scut.adrs.util.ontDaoUtils;
-import com.scut.adrs.nlcomprehension.*;
 
 @Controller
 public class RecommendController {
@@ -53,6 +51,7 @@ public class RecommendController {
 
 	@Autowired
 	SearchService searchService;
+
 	@Autowired
 	DescriptionComprehension descriptionComprehension;
 
@@ -218,24 +217,32 @@ public class RecommendController {
 
 	/**
 	 * 
-	 * @param sickness
-	 * @param symptom
+	 * @param description
+	 * @return
+	 * @Description 分词，返回模糊匹配的词条
+	 */
+	@RequestMapping("/parse")
+	@ResponseBody
+	public InterConceptQuestion parse(String description) {
+		return descriptionComprehension.comprehend(description);
+	}
+
+	/**
+	 * 
+	 * @param symptoms
+	 * @param bodySigns
+	 * @param pathogeny
+	 * @param medicalHistory
 	 * @param model
 	 * @param session
 	 * @return
 	 * @throws Exception
-	 * @Description 对输入的文本进行分词，并提交问题
+	 * @Description 根据用户提交的分词选项返回问题
 	 */
 	@RequestMapping("/searchSubmit")
-	public String searchSubmit(String sickness, String symptom, Model model, HttpSession session) throws Exception {
-		Result result = descriptionComprehension.parse(sickness + "," + symptom);
-		List<Term> terms = result.getTerms();
-		HashSet<String> infos = new HashSet<>();
-		for (int i = 0; i < terms.size(); i++) {
-			String word = terms.get(i).getName(); // 拿到词
-			infos.add(word);
-		}
-		Patient patient = searchService.searchInfo(infos);
+	public String searchSubmit(String[] symptoms, String[] bodySigns, String[] pathogeny, String[] medicalHistory,
+			Model model, HttpSession session) throws Exception {
+		Patient patient = searchService.buildPatient(symptoms, bodySigns, pathogeny, medicalHistory);
 		List<Question> questionList = patientService.getQuestionByPatient(patient);
 		if (questionList.size() == 0) {
 			return "error";

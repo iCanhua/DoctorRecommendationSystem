@@ -18,18 +18,59 @@
 		  </div>
 		
 		  <div data-role="main" class="ui-content">
-		    <form action="<%=request.getContextPath()%>/searchSubmit" method="post" data-ajax="false">
 		       <div class="ui-field-contain">
-		        <label for="info">病症信息:</label>
-		        <textarea name="sickness" id="sickness" placeholder="请输入病症信息，例如先天性心脏病，心力衰竭"></textarea>
+			        <label for="info">病症信息:</label>
+			        <textarea name="sickness" id="sickness" placeholder="请输入病症信息，例如先天性心脏病，心力衰竭"></textarea>
 		       </div>
 		       <div class="ui-field-contain">
-		        <label for="info">病情介绍:</label>
-		        <textarea name="symptom" id="symptom" placeholder="请输入病情描述，例如失眠，头昏"></textarea>
+			        <label for="info">病情介绍:</label>
+			        <textarea name="symptom" id="symptom" placeholder="请输入病情描述，例如失眠，头昏"></textarea>
 		       </div>
-		        <input class="ui-btn" type="submit" value="提交">
-		    </form>
+		       <button class="ui-btn" type="button" onclick="submitText();">匹配</button>
+		  </div>
+		  
+		  <div data-role="popup" id="detailDialog">
+			  <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn ui-icon-delete ui-btn-icon-notext ui-btn-right">关闭</a>
+			  
+		      <div data-role="header">
+		        <h1 id="name">模糊匹配</h1>
+		      </div>
+		
+		      <div data-role="main" class="ui-content">
+		        <form method="post" action="<%=request.getContextPath()%>/searchSubmit" data-ajax="false">
+			        <fieldset id="content" data-role="controlgroup">
+			          <legend>根据输入，系统模糊匹配到如下词条，请选择：</legend>	
+			      	</fieldset>
+			      	<input type="submit" data-inline="true" value="提交">
+			    </form>
+		      </div>
+
 		  </div>
 		</div>
 	</body>
+	<script type="text/javascript">
+	function submitText(){
+		 $link = "<%=request.getContextPath()%>/parse";
+		 $.post($link,
+	   		{
+	   			description:$("#sickness").val()+","+$("#symptom").val()
+	   		},	
+	   		function($data){
+	   			$("#content").html("");
+	   			$("#content").append("<legend>根据输入，系统模糊匹配到如下词条，请选择：</legend>	");
+	   			$.each($data, function($index1, $item){
+	   				if($index1=="symptoms"||$index1=="bodySigns"||$index1=="pathogeny"||$index1=="medicalHistory"){
+		   				$.each($item, function($index2, $choose){
+		   					if($choose!=null){
+		   						$name=$choose.iri.split("#")[1];
+		   						$("#content").append("<label for='"+$index2+$name+"'>"+$name+"</label><input type='checkbox' name='"+$index1+"' id='"+$index2+$name+"' value='"+$choose.iri+"'>");
+		   						$("#content").trigger("create");
+		   					}
+				 		});
+	   				}
+		 		});
+	   			$("#detailDialog").popup("open");
+		  });
+	}
+	</script>
 </html>
