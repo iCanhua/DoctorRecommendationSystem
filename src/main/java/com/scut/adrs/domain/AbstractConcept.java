@@ -5,6 +5,14 @@ import java.util.Set;
 
 public abstract class AbstractConcept implements Resource {
 	
+	public String getLocalName(){
+		String localName=getIRI();
+		if(localName!=null&&localName.contains("#")){
+			localName=localName.split("#")[1];
+		}
+		return localName;
+	}
+	
 	//重写该方法，便于加入相同的症状
 	@Override
 	public boolean equals(Object obj){

@@ -39,9 +39,9 @@ public class DescriptionComprehension implements DescriptionParser, Match {
 	}
 
 	@Override
-	public ArrayList<Resource> approximateMatch(Result result) {
+	public ArrayList<Resource> approximateMatch(String description,Result result) {
 
-		return matcher.approximateMatch(result);
+		return matcher.approximateMatch(description,result);
 	}
 
 	public InterConceptQuestion comprehend(String description) {
@@ -60,7 +60,7 @@ public class DescriptionComprehension implements DescriptionParser, Match {
 				interConceptQuestion.getMedicalHistory().add((Disease) resource);
 		}
 
-		reasourceList = matcher.approximateMatch(result);
+		reasourceList = matcher.approximateMatch(description,result);
 		for (Resource resource : reasourceList) {
 			if ("症状".equals(resource.getDomainType()))
 				interConceptQuestion.getHasSymptoms().add((Symptom) resource);
