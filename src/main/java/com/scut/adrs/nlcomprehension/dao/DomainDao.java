@@ -21,4 +21,5 @@ public interface DomainDao {
 		public Set<Pathogeny> getAllPathogeny();
 		public Set<Disease> getAllDisease();
 		public Resource getResource(Term term);
+		public String getComment(Resource re);
 }

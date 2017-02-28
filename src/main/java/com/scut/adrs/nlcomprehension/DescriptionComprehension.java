@@ -23,7 +23,7 @@ import com.scut.adrs.util.FileUtil;
 public class DescriptionComprehension implements DescriptionParser, Match {
 
 	@Autowired
-	AnsjDescriptionParser parser;
+	DescriptionParser parser;
 	@Autowired
 	ConceptMatch matcher;
 
@@ -39,14 +39,15 @@ public class DescriptionComprehension implements DescriptionParser, Match {
 	}
 
 	@Override
-	public ArrayList<Resource> approximateMatch(Result result) {
+	public ArrayList<Resource> approximateMatch(String description,Result result) {
 
-		return matcher.approximateMatch(result);
+		return matcher.approximateMatch(description,result);
 	}
 
 	public InterConceptQuestion comprehend(String description) {
+		
 		InterConceptQuestion interConceptQuestion = new InterConceptQuestion();
-		Result result = parser.parse(description).recognition(parser.getStopRecongnition());
+		Result result = parser.parse(description);
 		ArrayList<Resource> reasourceList = matcher.resourseMatch(result);
 		for (Resource resource : reasourceList) {
 			if ("症状".equals(resource.getDomainType()))
@@ -59,7 +60,7 @@ public class DescriptionComprehension implements DescriptionParser, Match {
 				interConceptQuestion.getMedicalHistory().add((Disease) resource);
 		}
 
-		reasourceList = matcher.approximateMatch(result);
+		reasourceList = matcher.approximateMatch(description,result);
 		for (Resource resource : reasourceList) {
 			if ("症状".equals(resource.getDomainType()))
 				interConceptQuestion.getHasSymptoms().add((Symptom) resource);

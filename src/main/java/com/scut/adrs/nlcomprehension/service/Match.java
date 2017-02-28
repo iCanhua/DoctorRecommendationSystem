@@ -8,5 +8,5 @@ import com.scut.adrs.domain.Resource;
 
 public interface Match {
 	public ArrayList<Resource> resourseMatch(Result result);
-	public ArrayList<Resource> approximateMatch(Result result);
+	public ArrayList<Resource> approximateMatch(String description,Result result);
 }

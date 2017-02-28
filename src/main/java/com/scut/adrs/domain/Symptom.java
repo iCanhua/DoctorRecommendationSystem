@@ -51,11 +51,12 @@ public class Symptom extends AbstractConcept {
 
 	public static void main(String[] args) {
 		Symptom a = new Symptom("123");
-		Symptom b = new Symptom("123");
+		Symptom b = new Symptom("12#3");
 		Set<Symptom> set = new HashSet<Symptom>();
 		set.add(b);
 		set.add(a);
 		System.out.println("症状大小" + set.size());
+		System.out.println(b.getLocalName());
 	}
 
 	@Override

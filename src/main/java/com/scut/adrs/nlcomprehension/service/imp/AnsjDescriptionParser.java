@@ -28,7 +28,7 @@ public class AnsjDescriptionParser implements DescriptionParser {
 
 	@Override
 	public Result parse(String description) {
-		Result result = DicAnalysis.parse(description);
+		Result result = DicAnalysis.parse(description).recognition(stopRecongnition);
 		return result;
 	}
 

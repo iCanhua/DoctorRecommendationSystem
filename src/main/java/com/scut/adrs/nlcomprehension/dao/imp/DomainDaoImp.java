@@ -4,7 +4,6 @@ import org.ansj.domain.Term;
 import org.apache.jena.ontology.OntClass;
 import org.springframework.stereotype.Service;
 
-import com.scut.adrs.domain.AbstractConcept;
 import com.scut.adrs.domain.BodySigns;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
@@ -29,6 +28,13 @@ public class DomainDaoImp extends AbstractOntParserDao implements DomainDao{
 		}else{
 			return null;
 		}
+		
+	}
+
+	@Override
+	public String getComment(Resource re) {
+		OntClass ontclass= model.getOntClass(re.getIRI());
+		return ontclass.getComment(null);
 		
 	}
 
