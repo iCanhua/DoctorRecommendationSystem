@@ -26,7 +26,7 @@ public class DescriptionComprehensionTest {
 	public void test() {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/spring*.xml");
 		AnsjDescriptionParser parser = ctx.getBean(AnsjDescriptionParser.class);
-		String description = "我测试，你呢，这是我心绞痛第心尖冲动一亚急性渗液缩窄性心包炎次心肌病短剧哦。心悸";
+		String description = "心有点绞痛，黑色的大便";
 		Result result = parser.parse(description).recognition(parser.getStopRecongnition());
 		System.out.println("分词结果：" + result);
 		ConceptMatch matcher = ctx.getBean(ConceptMatch.class);
@@ -37,27 +37,27 @@ public class DescriptionComprehensionTest {
 		System.out.println("..................................");
 		DescriptionComprehension dComprehension = ctx.getBean(DescriptionComprehension.class);
 		InterConceptQuestion question = dComprehension.comprehend(description);
-		for (Resource re : question.getBodySigns()) {
-			System.out.println("第1个输出：" + re.getIRI());
-		}
-		for (Resource re : question.getMedicalHistory()) {
-			System.out.println("第2个输出：" + re.getIRI());
-		}
-		for (Resource re : question.getPathogeny()) {
-			System.out.println("第3个输出：" + re.getIRI());
-		}
-		for (Resource re : question.getSymptoms()) {
-			System.out.println("第4个输出：" + re.getIRI());
-		}
+//		for (Resource re : question.getBodySigns()) {
+//			System.out.println("第1个输出：" + re.getIRI());
+//		}
+//		for (Resource re : question.getMedicalHistory()) {
+//			System.out.println("第2个输出：" + re.getIRI());
+//		}
+//		for (Resource re : question.getPathogeny()) {
+//			System.out.println("第3个输出：" + re.getIRI());
+//		}
+//		for (Resource re : question.getSymptoms()) {
+//			System.out.println("第4个输出：" + re.getIRI());
+//		}
 		for (Resource re : question.getHasBodySigns()) {
 			System.out.println("第5个输出：" + re.getIRI());
 		}
-		for (Resource re : question.getHasMedicalHistory()) {
-			System.out.println("第6个输出：" + re.getIRI());
-		}
-		for (Resource re : question.getHasPathogeny()) {
-			System.out.println("第7个输出：" + re.getIRI());
-		}
+//		for (Resource re : question.getHasMedicalHistory()) {
+//			System.out.println("第6个输出：" + re.getIRI());
+//		}
+//		for (Resource re : question.getHasPathogeny()) {
+//			System.out.println("第7个输出：" + re.getIRI());
+//		}
 		for (Resource re : question.getHasSymptoms()) {
 			System.out.println("第8个输出：" + re.getIRI());
 		}

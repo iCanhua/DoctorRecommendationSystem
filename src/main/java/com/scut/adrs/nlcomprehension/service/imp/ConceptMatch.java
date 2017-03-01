@@ -59,7 +59,7 @@ public class ConceptMatch implements Match {
 				String comment=domainDao.getComment(re);
 				if(S>0&&comment!=null&&!"".equals(comment)){
 					
-					S=S+new CosinSimTool(constructStrArray(description), constructStrArray(comment)).sim().floatValue();
+					S=100000*S+new CosinSimTool(constructStrArray(description), constructStrArray(comment)).sim().floatValue();
 					sortMap.put(re, S);
 				}
 	
@@ -67,8 +67,8 @@ public class ConceptMatch implements Match {
 		}
 		for(Resource newRe:sortAndLimited(sortMap, 10).keySet()){
 			resourceList.add(newRe);
-			System.out.println(newRe.getLocalName());
-			System.out.println(sortMap.get(newRe));
+//			System.out.println(newRe.getLocalName());
+//			System.out.println(sortMap.get(newRe));
 		}
 		
 		

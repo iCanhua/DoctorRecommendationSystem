@@ -24,7 +24,8 @@ public class ConceptMatchTest {
 	public void test() {
 		Match match=ctx.getBean(ConceptMatch.class);
 		AnsjDescriptionParser parser=ctx.getBean(AnsjDescriptionParser.class);
-		String str="黑色的大便";
+		String str="黑色的大便，心有点绞痛";
+//		System.out.println(parser.parse(str));
 		ArrayList<Resource> list=match.approximateMatch(str,parser.parse(str));
 		for(Resource re:list){
 			System.out.println(re.getLocalName());
