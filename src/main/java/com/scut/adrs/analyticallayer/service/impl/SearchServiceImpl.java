@@ -14,18 +14,17 @@ import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
+import com.scut.adrs.nlcomprehension.InterConceptQuestion;
 
 @Service
 public class SearchServiceImpl implements SearchService {
-	private static String NS = "http://www.semanticweb.org/fan/ontologies/2016/7/untitled-ontology-26#";
 
 	@Autowired
 	public OntModel myOntModel;
 
 	@Override
-	public Patient buildPatient(String[] symptoms, String[] bodySigns, String[] pathogeny, String[] medicalHistory)
-			throws Exception {
-		Patient patient = new Patient();
+	public Patient buildPatient(String[] symptoms, String[] bodySigns, String[] pathogeny, String[] medicalHistory,
+			Patient patient) throws Exception {
 		Set<Symptom> hasSymptoms = new HashSet<>();
 		Set<BodySigns> hasBodySigns = new HashSet<>();
 		Set<Pathogeny> hasPathogeny = new HashSet<>();
@@ -70,6 +69,15 @@ public class SearchServiceImpl implements SearchService {
 		patient.getHasBodySigns().addAll(hasBodySigns);
 		patient.getHasPathogeny().addAll(hasPathogeny);
 		patient.getHasMedicalHistory().addAll(hasMedicalHistory);
+		return patient;
+	}
+
+	@Override
+	public Patient buildPatient(InterConceptQuestion interConceptQuestion, Patient patient) {
+		patient.getHasSymptoms().addAll(interConceptQuestion.getSymptoms());
+		patient.getHasBodySigns().addAll(interConceptQuestion.getBodySigns());
+		patient.getHasPathogeny().addAll(interConceptQuestion.getPathogeny());
+		patient.getHasMedicalHistory().addAll(interConceptQuestion.getMedicalHistory());
 		return patient;
 	}
 
