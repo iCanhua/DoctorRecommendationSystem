@@ -48,18 +48,7 @@ public class ConceptMatch implements Match {
 		resourceSet.addAll(domainDao.getAllDisease());
 		resourceSet.addAll(domainDao.getAllPathogeny());
 		resourceSet.addAll(domainDao.getAllSymptom());
-
-		List<Term> terms = result.getTerms();
-		for (Term term : terms) {
-			for (Resource re : resourceSet) {
-				Float S = new CosinSimTool(constructStrArray(term.getName()), constructStrArray(re.getLocalName()))
-						.sim().floatValue();
-				String comment = domainDao.getComment(re);
-				if (S > 0 && comment != null && !"".equals(comment)) {
-
-					S = S + new CosinSimTool(constructStrArray(description), constructStrArray(comment)).sim()
-							.floatValue();
-		
+	
 		List<Term> terms=result.getTerms();
 		for(Term term:terms){
 			for(Resource re:resourceSet){
@@ -67,13 +56,13 @@ public class ConceptMatch implements Match {
 				String comment=domainDao.getComment(re);
 				if(S>0&&comment!=null&&!"".equals(comment)){
 					
-					S=100000*S+new CosinSimTool(constructStrArray(description), constructStrArray(comment)).sim().floatValue();
+					S=S+new CosinSimTool(constructStrArray(description), constructStrArray(comment)).sim().floatValue();
 					sortMap.put(re, S);
 				}
 
 			}
 		}
-		for (Resource newRe : sortAndLimited(sortMap, 10).keySet()) {
+		for (Resource newRe : sortAndLimited(sortMap, 100).keySet()) {
 			resourceList.add(newRe);
 //			System.out.println(newRe.getLocalName());
 //			System.out.println(sortMap.get(newRe));
