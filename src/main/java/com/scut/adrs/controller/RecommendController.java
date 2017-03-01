@@ -223,8 +223,12 @@ public class RecommendController {
 	 */
 	@RequestMapping("/parse")
 	@ResponseBody
-	public InterConceptQuestion parse(String description) {
-		return descriptionComprehension.comprehend(description);
+	public InterConceptQuestion parse(String description, HttpSession session) {
+		InterConceptQuestion interConceptQuestion = descriptionComprehension.comprehend(description);
+		Patient patient = new Patient();
+		patient = searchService.buildPatient(interConceptQuestion, patient);
+		session.setAttribute("accuratePatient", patient);
+		return interConceptQuestion;
 	}
 
 	/**
@@ -240,15 +244,17 @@ public class RecommendController {
 	 * @Description 根据用户提交的分词选项返回问题
 	 */
 	@RequestMapping("/searchSubmit")
-	public String searchSubmit(String[] symptoms, String[] bodySigns, String[] pathogeny, String[] medicalHistory,
-			Model model, HttpSession session) throws Exception {
-		Patient patient = searchService.buildPatient(symptoms, bodySigns, pathogeny, medicalHistory);
+	public String searchSubmit(String[] hasSymptoms, String[] hasBodySigns, String[] hasPathogeny,
+			String[] hasMedicalHistory, Model model, HttpSession session) throws Exception {
+		Patient patient = (Patient) session.getAttribute("accuratePatient");
+		patient = searchService.buildPatient(hasSymptoms, hasBodySigns, hasPathogeny, hasMedicalHistory, patient);
 		List<Question> questionList = patientService.getQuestionByPatient(patient);
 		if (questionList.size() == 0) {
 			return "error";
 		}
 		model.addAttribute("questions", questionList);
 		session.setAttribute("patient", patient);
+		session.removeAttribute("accuratePatient");
 		return "question";
 	}
 

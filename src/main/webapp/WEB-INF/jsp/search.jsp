@@ -50,16 +50,26 @@
 	</body>
 	<script type="text/javascript">
 	function submitText(){
+		 //显示加载器
+	     $.mobile.loading('show', {  
+	        text: '加载中...', //加载器中显示的文字  
+	        textVisible: true, //是否显示文字  
+	        theme: 'a',        //加载器主题样式a-e  
+	        textonly: false,   //是否只显示文字  
+	        html: ""           //要显示的html内容，如图片等  
+	     });
 		 $link = "<%=request.getContextPath()%>/parse";
 		 $.post($link,
 	   		{
 	   			description:$("#sickness").val()+","+$("#symptom").val()
 	   		},	
 	   		function($data){
+	   			//隐藏加载器
+	   			$.mobile.loading('hide');
 	   			$("#content").html("");
 	   			$("#content").append("<legend>根据输入，系统模糊匹配到如下词条，请选择：</legend>	");
 	   			$.each($data, function($index1, $item){
-	   				if($index1=="symptoms"||$index1=="bodySigns"||$index1=="pathogeny"||$index1=="medicalHistory"){
+	   				if($index1=="hasSymptoms"||$index1=="hasBodySigns"||$index1=="hasPathogeny"||$index1=="hasMedicalHistory"){
 		   				$.each($item, function($index2, $choose){
 		   					if($choose!=null){
 		   						$name=$choose.iri.split("#")[1];
