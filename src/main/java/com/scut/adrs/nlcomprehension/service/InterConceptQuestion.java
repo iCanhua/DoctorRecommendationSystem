@@ -1,14 +1,18 @@
-package com.scut.adrs.nlcomprehension;
+package com.scut.adrs.nlcomprehension.service;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.scut.adrs.domain.*;
-
+/**
+ * 交互问题，该交互问题性质同领域对象中的InterQuestion，拓展了InterQuestion的能力并且新增加用户对描述确定的能力！具体见类构造
+ * @author FAN
+ *
+ */
 public class InterConceptQuestion extends InterQuestion{
-	private Set<Symptom> Symptoms;//是否拥有症状
-	private Set<BodySigns> BodySigns;//是否拥有体征
-	private Set<Pathogeny> Pathogeny;//是否拥有病因
-	private Set<Disease> MedicalHistory;//是否拥有病史
+	private Set<Symptom> Symptoms;//描述中是否拥有症状
+	private Set<BodySigns> BodySigns;//描述中是否拥有体征
+	private Set<Pathogeny> Pathogeny;//描述中是否拥有病因
+	private Set<Disease> MedicalHistory;//描述中是否拥有病史
 	
 	public InterConceptQuestion() {
 		super();

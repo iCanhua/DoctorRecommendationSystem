@@ -1,4 +1,4 @@
-package com.scut.adrs.recommendation.service;
+package com.scut.adrs.recommendation.diagnose;
 
 import java.util.Set;
 import com.scut.adrs.domain.BodySigns;

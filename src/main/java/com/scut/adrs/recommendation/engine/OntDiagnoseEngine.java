@@ -17,9 +17,14 @@ import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.dao.OntParserDao;
+import com.scut.adrs.recommendation.diagnose.DiagnoseKnowledgeEngine;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
-import com.scut.adrs.recommendation.service.DiagnoseKnowledgeEngine;
-
+/**
+ * 实验类！
+ * 该类为实验用，同样实现诊断知识引擎，只是方法不是余弦相似度，而是直接利用本体信息进行过滤
+ * @author FAN
+ *
+ */
 @Service
 public class OntDiagnoseEngine implements DiagnoseKnowledgeEngine{
 	Float s=0F,b=0F,p=0F,d=0F;
@@ -145,23 +150,5 @@ public class OntDiagnoseEngine implements DiagnoseKnowledgeEngine{
 		return diseaseSet;
 	}
 	
-	/**
-	 * 抽取共同部分代码，判断某个本体是否为superURI的之类
-	 * @param superRdf
-	 * @param ontClass
-	 * @return
-	 */
-//	private boolean isSuperClass(String superURI,OntClass ontClass){
-//		boolean finded=false;
-//		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
-//		while(iterator.hasNext()){
-//			OntClass superClass=(OntClass) iterator.next();
-//			if(superURI.equals(superClass.getURI())){
-//				finded=true;
-//			}
-//		}
-//		return finded;
-//	}
-
 
 }

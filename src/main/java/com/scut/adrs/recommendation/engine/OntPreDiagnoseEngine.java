@@ -17,8 +17,8 @@ import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.dao.OntParserDao;
+import com.scut.adrs.recommendation.diagnose.PreDiaKnowledgeEngine;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
-import com.scut.adrs.recommendation.service.PreDiaKnowledgeEngine;
 import com.scut.adrs.util.ontDaoUtils;
 
 @Service
@@ -63,7 +63,6 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
     			if(resource.as(OntClass.class).hasSuperClass(ontParserDao.getModel().getOntClass(ontParserDao.NS+"疾病及综合症"))){
     				interDiseaseName.add(re.asSomeValuesFromRestriction().getSomeValuesFrom().getURI());
    			 	}
-    				
     		}
     	}
     	for(String rdf:interDiseaseName){
@@ -93,13 +92,9 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
     	 //开始构造交互症状
     	String symptomURI=NS+"症状";
     	for(OntClass ontclass:ontClassSet){
-//    		if(isSuperClass(symptomURI, ontclass)){
-//    			interSymptom.add(new Symptom(ontclass.getURI()));
-//    		}
-    		//System.out.println("外"+ontclass.getLocalName());
+
     		if(ontclass.hasSuperClass(ontParserDao.getModel().getOntClass(symptomURI))){
     			interSymptom.add(new Symptom(ontclass.getURI()));
-    			//System.out.println(ontclass.getLocalName());
     		}
     	}
     	return interSymptom;
@@ -125,9 +120,6 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
     	 //开始构造交互病因
     	 String pathgenyURI=NS+"病因";
     	for(OntClass ontclass:ontClassSet){
-//    		if(isSuperClass(pathgenyURI, ontclass)){
-//    			interPathogeny.add(new Pathogeny(ontclass.getURI()));
-//    		}
     		if(ontclass.hasSuperClass(ontParserDao.getModel().getOntClass(pathgenyURI))){
     			interPathogeny.add(new Pathogeny(ontclass.getURI()));
     		}
@@ -156,9 +148,6 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
     	//开始构造交互疾病
     	String diseaseURI=NS+"疾病及综合症";
     	for(OntClass ontclass:ontClassSet){
-//    		if(isSuperClass(diseaseURI, ontclass)){
-//    			interDisease.add(new Disease(ontclass.getURI()));
-//    		}
     		if(ontclass.hasSuperClass(ontParserDao.getModel().getOntClass(diseaseURI))){
     			interDisease.add(new Disease(ontclass.getURI()));
     		}
@@ -185,17 +174,7 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
     	 //开始构造交互体征
     	String bodySignsURI=NS+"体征";
     	for(OntClass ontclass:ontClassSet){
-//    		boolean finded=false;
-//    		ExtendedIterator<OntClass> iterator=ontclass.listSuperClasses(false);
-//    		while(iterator.hasNext()){
-//    			OntClass superClass=(OntClass) iterator.next();
-//    			if(bodySignsURI.equals(superClass.getURI())){
-//    				finded=true;
-//    			}
-//    		}
-//    		if(finded==true){
-//    			interBodySigns.add(new BodySigns(ontclass.getURI()));
-//    		}
+
     		if(ontclass.hasSuperClass(ontParserDao.getModel().getOntClass(bodySignsURI))){
     			interBodySigns.add(new BodySigns(ontclass.getURI()));
     		}
@@ -203,21 +182,5 @@ public class OntPreDiagnoseEngine implements PreDiaKnowledgeEngine{
 
 		return interBodySigns;
 	}
-	/**
-	 * 抽取共同部分代码，判断某个本体是否为superURI的之类
-	 * @param superRdf
-	 * @param ontClass
-	 * @return
-	 */
-//	private boolean isSuperClass(String superURI,OntClass ontClass){
-//		boolean finded=false;
-//		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
-//		while(iterator.hasNext()){
-//			OntClass superClass=(OntClass) iterator.next();
-//			if(superURI.equals(superClass.getURI())){
-//				finded=true;
-//			}
-//		}
-//		return finded;
-//	}
+
 }

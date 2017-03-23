@@ -14,7 +14,7 @@ import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
-import com.scut.adrs.nlcomprehension.InterConceptQuestion;
+import com.scut.adrs.nlcomprehension.service.InterConceptQuestion;
 
 @Service
 public class SearchServiceImpl implements SearchService {

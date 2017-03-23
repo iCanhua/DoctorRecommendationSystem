@@ -1,4 +1,4 @@
-package com.scut.adrs.recommendation.service.imp;
+package com.scut.adrs.recommendation.diagnose.imp;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 import com.github.andrewoma.dexx.collection.ArrayList;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Patient;
+import com.scut.adrs.recommendation.diagnose.Diagnose;
+import com.scut.adrs.recommendation.diagnose.DiagnoseKnowledgeEngine;
 import com.scut.adrs.recommendation.exception.DiagnoseException;
-import com.scut.adrs.recommendation.service.Diagnose;
-import com.scut.adrs.recommendation.service.DiagnoseKnowledgeEngine;
 @Service
 public class DiagnosisImp implements Diagnose{
 	//consinEngine

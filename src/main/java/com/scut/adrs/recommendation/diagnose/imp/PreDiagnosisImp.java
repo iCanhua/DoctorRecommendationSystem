@@ -1,4 +1,4 @@
-package com.scut.adrs.recommendation.service.imp;
+package com.scut.adrs.recommendation.diagnose.imp;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -14,20 +14,30 @@ import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.dao.OntParserDao;
+import com.scut.adrs.recommendation.diagnose.PreDiaKnowledgeEngine;
+import com.scut.adrs.recommendation.diagnose.PreDiagnosis;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
-import com.scut.adrs.recommendation.service.PreDiaKnowledgeEngine;
-import com.scut.adrs.recommendation.service.PreDiagnosis;
-
+/**
+ * 该类为预诊断服务类，编写预诊断业务流程，主要作用为根据病人初始信息，完善整个患病模型，表现为与用户做交互！
+ * @author FAN
+ *
+ */
 @Service
 public class PreDiagnosisImp implements PreDiagnosis {
+	/*
+	 * 预诊断算法引擎接口，该引擎可以根据不同本体库替换，只需实现该接口可保证整个预诊断业务正常进行
+	 */
 	@Autowired
-	PreDiaKnowledgeEngine knowledgeEngine;
+	private PreDiaKnowledgeEngine knowledgeEngine;
+	
+	
 	public PreDiaKnowledgeEngine getKnowledgeEngine() {
 		return knowledgeEngine;
 	}
 	public void setKnowledgeEngine(PreDiaKnowledgeEngine knowledgeEngine) {
 		this.knowledgeEngine = knowledgeEngine;
 	}
+	
 	/**
 	 * 预诊断，根据病人的症状信息去构建和病人交互的问题对象！
 	 */
@@ -76,7 +86,11 @@ public class PreDiagnosisImp implements PreDiagnosis {
 		interQuestion.setHasMedicalHistory(interMedicalHistory);
 		return interQuestion;
 	}
-
+	
+	/**
+	 * 该方法是预诊断的第二个功能，交互后确认的信息和病人对象，填充整个患病模型
+	 * @return 完整的病人模型
+	 */
 	@Override
 	public Patient prediagnosis(Patient patient, InterQuestion interQuestion) {
 		patient.getHasSymptoms().addAll(interQuestion.getHasSymptoms());
@@ -86,8 +100,6 @@ public class PreDiagnosisImp implements PreDiagnosis {
 		patient.setPreDiagnosis(true);
 		return patient;
 	}
-	public static void main(String[] args) {
-		
-	}
+	
 
 }

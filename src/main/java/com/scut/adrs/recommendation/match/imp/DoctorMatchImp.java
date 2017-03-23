@@ -1,4 +1,4 @@
-package com.scut.adrs.recommendation.service.imp;
+package com.scut.adrs.recommendation.match.imp;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Doctor;
 import com.scut.adrs.domain.Patient;
-import com.scut.adrs.recommendation.service.DocMatchKnowledgeEngine;
-import com.scut.adrs.recommendation.service.DoctorMatch;
+import com.scut.adrs.recommendation.match.DocMatchKnowledgeEngine;
+import com.scut.adrs.recommendation.match.DoctorMatch;
 @Service
 public class DoctorMatchImp implements DoctorMatch {
 	@Autowired

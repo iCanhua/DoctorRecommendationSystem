@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.jena.ontology.OntClass;
-
 import org.ansj.domain.Term;
 
 import com.scut.adrs.domain.BodySigns;
@@ -22,4 +21,6 @@ public interface DomainDao {
 		public Set<Disease> getAllDisease();
 		public Resource getResource(Term term);
 		public String getComment(Resource re);
+		public boolean hasAnatomical(String word);
+		public HashSet<Resource> getRelativeResource(String word)throws Exception;
 }

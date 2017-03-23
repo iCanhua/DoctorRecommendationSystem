@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ontDaoUtils {
-	static String filepath="11.25.owl";
+	static String filepath="root-ontology.owl";
 	static String SOURSE;
     public static String getFilepath() {
 		return filepath;

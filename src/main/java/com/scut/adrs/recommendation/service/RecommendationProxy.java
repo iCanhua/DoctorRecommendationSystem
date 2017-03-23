@@ -1,4 +1,4 @@
-package com.scut.adrs.recommendation;
+package com.scut.adrs.recommendation.service;
 
 import java.util.Map;
 import java.util.Set;
@@ -18,11 +18,11 @@ import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.dao.OntParserDao;
+import com.scut.adrs.recommendation.diagnose.Diagnose;
+import com.scut.adrs.recommendation.diagnose.PreDiagnosis;
 import com.scut.adrs.recommendation.exception.DiagnoseException;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
-import com.scut.adrs.recommendation.service.Diagnose;
-import com.scut.adrs.recommendation.service.DoctorMatch;
-import com.scut.adrs.recommendation.service.PreDiagnosis;
+import com.scut.adrs.recommendation.match.DoctorMatch;
 import com.scut.adrs.util.ontDaoUtils;
 
 @Service
@@ -72,18 +72,14 @@ public class RecommendationProxy implements PreDiagnosis, Diagnose, DoctorMatch 
 
 	@Override
 	public Patient prediagnosis(Patient patient, InterQuestion question) {
-		//long starTime=System.currentTimeMillis();
 		Patient pt = preDiagnose.prediagnosis(patient, question);
-		//long endTime=System.currentTimeMillis();
-		//System.out.println("预诊断时间："+(endTime-starTime));
-		// pt.setPreDiagnosis(true);
+		
 		return pt;
 	}
 
 	public static void main(String[] args) throws UnExistURIException {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext(
 				"spring/spring*.xml");
-		// PreDiagnosis pd=ctx.getBean(PreDiagnosisImp.class);
 		Patient patient = new Patient();
 		patient.addSymptom(ontDaoUtils.getNS() + "黑蒙");
 		patient.addSymptom(ontDaoUtils.getNS() + "癫痫");
@@ -134,26 +130,13 @@ public class RecommendationProxy implements PreDiagnosis, Diagnose, DoctorMatch 
 
 	@Override
 	public Patient diagnose(Patient patient) {
-//		for(Symptom sy:patient.getHasSymptoms()){
-//			System.out.println("总症状："+sy.getSymptomName());
-//		}
-//		for(Pathogeny py:patient.getHasPathogeny()){
-//			System.out.println("病因："+py.getPathogenyName());
-//		}
-//		for(BodySigns bs:patient.getHasBodySigns()){
-//			System.out.println("体征"+bs.getBodySignName());
-//		}
-//		for(Disease d:patient.getHasMedicalHistory()){
-//			System.out.println("病史"+d.getDiseaseName());
-//		}
+
 		if (!patient.isPreDiagnosis()) {
 			throw new DiagnoseException(
 					"please prediagnose the patient before you diagnose a patient !");
 		}
-		//long starTime=System.currentTimeMillis();
 		Patient patient_=diagnose.diagnose(patient);
-		//long endTime=System.currentTimeMillis();
-		//System.out.println("诊断时间："+(endTime-starTime));
+		
 		return patient_;
 	}
 
@@ -166,10 +149,8 @@ public class RecommendationProxy implements PreDiagnosis, Diagnose, DoctorMatch 
 			throw new DiagnoseException(
 					"please prediagnose the patient before you match a doctor !");
 		}
-		//long starTime=System.currentTimeMillis();
 		Map<Doctor, Float> map=doctorMatch.doctorMatch(patient);
-		//long endTime=System.currentTimeMillis();
-		//System.out.println("医生匹配时间："+(endTime-starTime));
+	
 		return map;
 	}
 

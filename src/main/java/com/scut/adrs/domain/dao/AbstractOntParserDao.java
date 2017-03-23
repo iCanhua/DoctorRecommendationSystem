@@ -1,4 +1,4 @@
-package com.scut.adrs.service;
+package com.scut.adrs.domain.dao;
 
 import java.util.HashSet;
 import java.util.Iterator;

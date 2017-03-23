@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 import com.scut.adrs.nlcomprehension.service.DescriptionParser;
 import com.scut.adrs.util.DicInsertUtil;
 import com.scut.adrs.util.FileUtil;
-
+/**
+ * 描述解析器的Ansj实现，该实现包括对停用词设置、用户词典初始化等流程
+ * @author FAN
+ *
+ */
 @Service
 public class AnsjDescriptionParser implements DescriptionParser {
 
@@ -25,7 +29,10 @@ public class AnsjDescriptionParser implements DescriptionParser {
 		userLibraryInit();
 		stopWordLibraryInit();
 	}
-
+	/**
+	 * 返回符合业务需求的句子分词过程
+	 * @return 分词结果
+	 */
 	@Override
 	public Result parse(String description) {
 		Result result = DicAnalysis.parse(description).recognition(stopRecongnition);

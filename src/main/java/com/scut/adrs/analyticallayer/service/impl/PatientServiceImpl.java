@@ -10,8 +10,8 @@ import com.scut.adrs.analyticallayer.dto.Question;
 import com.scut.adrs.analyticallayer.service.PatientService;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.InterQuestion;
-import com.scut.adrs.recommendation.RecommendationProxy;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
+import com.scut.adrs.recommendation.service.RecommendationProxy;
 import com.scut.adrs.util.QuestionUtil;
 
 @Service

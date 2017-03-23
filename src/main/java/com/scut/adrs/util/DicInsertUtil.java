@@ -23,10 +23,12 @@ public class DicInsertUtil {
 		OntClass rootBodySigns = myOntModel.getOntClass(NS + "体征");
 		OntClass rootPathogeny = myOntModel.getOntClass(NS + "病因");
 		OntClass rootDisease = myOntModel.getOntClass(NS + "疾病及综合症");
+		OntClass rootAnatomical = myOntModel.getOntClass(NS + "解剖结构");
 		ExtendedIterator<OntClass> listRootSymptomSubClasses = rootSymptom.listSubClasses();
 		ExtendedIterator<OntClass> listRootBodySignsSubClasses = rootBodySigns.listSubClasses();
 		ExtendedIterator<OntClass> listRootPathogenySubClasses = rootPathogeny.listSubClasses();
 		ExtendedIterator<OntClass> listRootDiseaseSubClasses = rootDisease.listSubClasses();
+		ExtendedIterator<OntClass> listRootAnatomical = rootAnatomical.listSubClasses();
 		while (listRootSymptomSubClasses.hasNext()) {
 			OntClass symptom = listRootSymptomSubClasses.next();
 			String name = symptom.getURI().split("#")[1];
@@ -51,5 +53,11 @@ public class DicInsertUtil {
 			DicLibrary.insert(DicLibrary.DEFAULT, name, "n", 1000);
 		}
 		logger.warn("疾病词条录入完毕");
+		while (listRootAnatomical.hasNext()) {
+			OntClass anatomical = listRootAnatomical.next();
+			String name = anatomical.getURI().split("#")[1];
+			DicLibrary.insert(DicLibrary.DEFAULT, name, "n", 1000);
+		}
+		logger.warn("解剖结构词条录入完毕");
 	}
 }

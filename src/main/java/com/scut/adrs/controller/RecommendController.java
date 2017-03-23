@@ -26,9 +26,9 @@ import com.scut.adrs.domain.Doctor;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Symptom;
-import com.scut.adrs.nlcomprehension.DescriptionComprehension;
-import com.scut.adrs.nlcomprehension.InterConceptQuestion;
-import com.scut.adrs.recommendation.RecommendationProxy;
+import com.scut.adrs.nlcomprehension.service.DescriptionComprehension;
+import com.scut.adrs.nlcomprehension.service.InterConceptQuestion;
+import com.scut.adrs.recommendation.service.RecommendationProxy;
 import com.scut.adrs.util.SortUtil;
 import com.scut.adrs.util.ontDaoUtils;
 

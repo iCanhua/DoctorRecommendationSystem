@@ -1,4 +1,4 @@
-package com.scut.adrs.recommendation.service;
+package com.scut.adrs.recommendation.match;
 
 import java.util.Map;
 

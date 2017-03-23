@@ -1,7 +1,7 @@
 package com.scut.adrs.analyticallayer.service;
 
 import com.scut.adrs.domain.Patient;
-import com.scut.adrs.nlcomprehension.InterConceptQuestion;
+import com.scut.adrs.nlcomprehension.service.InterConceptQuestion;
 
 public interface SearchService {
 

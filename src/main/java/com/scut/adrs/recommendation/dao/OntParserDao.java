@@ -9,8 +9,8 @@ import com.scut.adrs.domain.BodySigns;
 import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Pathogeny;
 import com.scut.adrs.domain.Symptom;
+import com.scut.adrs.recommendation.diagnose.PreDiaKnowledgeEngine;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
-import com.scut.adrs.recommendation.service.PreDiaKnowledgeEngine;
 import com.scut.adrs.util.*;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class OntParserDao{
 	public static void setNS(String nS) {
 		NS = nS;
 	}
-	//打印本体
+	//打印本体，测试用
     public static void classSum(OntModel model){
         int i=0;
         System.out.println("本体模型类大小："+model.listClasses().toSet().size());
@@ -153,6 +153,7 @@ public class OntParserDao{
 		return restrictionSet;
 	}
     
+    //根据约束获取被约束的类
     public Set<OntClass> getSubClass(Restriction re){
     	//存放所有约束相关的子类的集合
     	Set<OntClass> ontClassSet = new HashSet<OntClass>();
@@ -162,6 +163,7 @@ public class OntParserDao{
         }
     	return ontClassSet;
     }
+    //根据URI获取父类
     public  Set<OntClass> getSuperClass(boolean isDirect,String uri){
     	if(!uri.contains(NS)){
     		uri=NS+uri;
@@ -193,18 +195,4 @@ public class OntParserDao{
 		}
 		return finded;
 	}
-
-    
-
-	public static void main(String[] args) {
-        OntModel model= ontDaoUtils.getModel();
-        //classSum(model);
-        //parseRestriction(model,"全身不适");
-        //getRestriction(model,model.getOntProperty(ontDaoUtils.getNS()+"擅长"),model.getResource(ontDaoUtils.getNS()+"心肌病"));
-    }
-    
-   
-
-
-
 }

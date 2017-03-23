@@ -15,8 +15,12 @@ import com.scut.adrs.domain.Disease;
 import com.scut.adrs.domain.Doctor;
 import com.scut.adrs.domain.Patient;
 import com.scut.adrs.recommendation.dao.OntParserDao;
-import com.scut.adrs.recommendation.service.DocMatchKnowledgeEngine;
-
+import com.scut.adrs.recommendation.match.DocMatchKnowledgeEngine;
+/**
+ * 该类为病人匹配医生，该引擎算法实现比较简陋！仅匹配擅长和尤其擅长概念
+ * @author FAN
+ *
+ */
 @Service
 public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 	@Autowired
@@ -45,16 +49,12 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 			Iterator<OntClass> itor=ralativSet.iterator();
 			while (itor.hasNext()) {
 				OntClass temp = itor.next();
-//				if(!this.isSuperClass(ontParserDao.NS+"疾病及综合症", temp)){
-//					itor.remove();
-//				}
+
 				if(!temp.hasSuperClass(ontParserDao.getModel().getOntClass(ontParserDao.NS+"疾病及综合症"))){
 					itor.remove();
 				}
 			}
 			for(OntClass ont:ralativSet){
-				//把相关父类以同样的指数加入该疾病集
-				//System.out.println(ds.getDiseaseName()+"的父类"+ont.getLocalName());
 				DiseaseMap_Temp.put(new Disease(ont.getURI()), DiseaseMap.get(ds));
 			}
 		}
@@ -65,14 +65,12 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 				Disease matchDisease=new Disease(r.asSomeValuesFromRestriction().getSomeValuesFrom().getURI());
 				if(DiseaseMap.keySet().contains(matchDisease)){
 					String docUri=r.asSomeValuesFromRestriction().listInstances().next().getURI();
-					//System.out.println("找到医生："+docUri+"：这个医生擅长"+r.asSomeValuesFromRestriction().getSomeValuesFrom().getLocalName());
 					if("".equals(docUri)||docUri!=null){
 						Doctor doctor=new Doctor(docUri);
 						if(doctorMap.containsKey(doctor)){
 							Float index=DiseaseMap.get(matchDisease);
 							index=index+doctorMap.get(doctor);
 							doctorMap.put(doctor, index);
-							//System.out.println(doctor.getName()+"这个医生升了："+index);
 						}else{
 							doctorMap.put(doctor, DiseaseMap.get(matchDisease));
 						}
@@ -84,14 +82,12 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 				Disease matchDisease=new Disease(r.asAllValuesFromRestriction().getAllValuesFrom().getURI());
 				if(DiseaseMap.keySet().contains(matchDisease)){
 					String docUri=r.asAllValuesFromRestriction().listInstances().next().getURI();
-					//System.out.println("找到医生："+docUri);
 					if("".equals(docUri)||docUri!=null){
 						Doctor doctor=new Doctor(docUri);
 						if(doctorMap.containsKey(doctor)){
 							Float index=DiseaseMap.get(matchDisease);
 							index=index+doctorMap.get(doctor);
 							doctorMap.put(doctor, index);
-							//System.out.println(doctor.getName()+"这个医生升了："+index);
 						}else{
 							doctorMap.put(doctor, DiseaseMap.get(matchDisease));
 						}
@@ -104,14 +100,12 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 				Disease matchDisease=new Disease(r.asSomeValuesFromRestriction().getSomeValuesFrom().getURI());
 				if(DiseaseMap.keySet().contains(matchDisease)){
 					String docUri=r.asSomeValuesFromRestriction().listInstances().next().getURI();
-					//System.out.println("找到尤其擅长的医生："+docUri+"：这个医生擅长"+r.asSomeValuesFromRestriction().getSomeValuesFrom().getLocalName());
 					if("".equals(docUri)||docUri!=null){
 						Doctor doctor=new Doctor(docUri);
 						if(doctorMap.containsKey(doctor)){
 							Float index=DiseaseMap.get(matchDisease);
 							index=(index+doctorMap.get(doctor))*1.5F;
 							doctorMap.put(doctor, index);
-							//System.out.println(doctor.getName()+"这个医生升了："+index);
 						}else{
 							doctorMap.put(doctor, DiseaseMap.get(matchDisease));
 						}
@@ -122,14 +116,12 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 				Disease matchDisease=new Disease(r.asAllValuesFromRestriction().getAllValuesFrom().getURI());
 				if(DiseaseMap.keySet().contains(matchDisease)){
 					String docUri=r.asAllValuesFromRestriction().listInstances().next().getURI();
-					//System.out.println("找到尤其擅长的医生："+docUri);
 					if("".equals(docUri)||docUri!=null){
 						Doctor doctor=new Doctor(docUri);
 						if(doctorMap.containsKey(doctor)){
 							Float index=DiseaseMap.get(matchDisease);
 							index=(index+doctorMap.get(doctor))*1.5F;
 							doctorMap.put(doctor, index);
-							//System.out.println(doctor.getName()+"这个医生升了："+index);
 						}else{
 							doctorMap.put(doctor, DiseaseMap.get(matchDisease));
 						}
@@ -138,40 +130,10 @@ public class OntSimilarCalculateEngine implements DocMatchKnowledgeEngine {
 			}
 		}
 		
-		
-		
-		
-		
-		// System.out.println("找医生");
-//		Doctor doctor1 = new Doctor(OntParserDao.NS + "刘烈");
-//		Doctor doctor2 = new Doctor(OntParserDao.NS + "张曹进");
-//		Doctor doctor3 = new Doctor(OntParserDao.NS + "林展翼");
-//		Doctor doctor4 = new Doctor(OntParserDao.NS + "吴书林");
-//		doctorMap.put(doctor4, 23.02F);
-//		doctorMap.put(doctor2, 53.02F);
-//		doctorMap.put(doctor3, 2.02F);
-//		doctorMap.put(doctor1, 13.02F);
+
 		return doctorMap;
 	}
-	/**
-	 * 抽取共同部分代码，判断某个本体是否为superURI的之类
-	 * @param superRdf
-	 * @param ontClass
-	 * @return
-	 */
-//	private boolean isSuperClass(String superURI,OntClass ontClass){
-//		boolean finded=false;
-//		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
-//		while(iterator.hasNext()){
-//			OntClass superClass=(OntClass) iterator.next();
-//			if(superURI.equals(superClass.getURI())){
-//				finded=true;
-//			}
-//		}
-//		return finded;
-//	}
-	public static void main(String[] args) {
-		
-	}
+	
+	
 
 }

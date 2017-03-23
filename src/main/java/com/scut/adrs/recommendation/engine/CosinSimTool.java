@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
+/**
+ * 计算余弦相似度
+ * @author FAN
+ *
+ */
 public class CosinSimTool {
 	boolean isException=false;
 	Map<String, int[]> vectorMap = new HashMap<String, int[]>();

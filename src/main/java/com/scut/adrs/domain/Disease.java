@@ -35,7 +35,6 @@ public class Disease extends AbstractConcept{
 
 	@Override
 	public String getDomainType() {
-		
 		return "疾病及综合症";
 	}
 }

@@ -1,5 +1,6 @@
 package com.scut.adrs.recommendation.engine;
 import java.math.BigDecimal;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,9 +20,14 @@ import com.scut.adrs.domain.Patient;
 import com.scut.adrs.domain.Resource;
 import com.scut.adrs.domain.Symptom;
 import com.scut.adrs.recommendation.dao.OntParserDao;
+import com.scut.adrs.recommendation.diagnose.DiagnoseKnowledgeEngine;
+import com.scut.adrs.recommendation.diagnose.PreDiaKnowledgeEngine;
 import com.scut.adrs.recommendation.exception.UnExistURIException;
-import com.scut.adrs.recommendation.service.DiagnoseKnowledgeEngine;
-import com.scut.adrs.recommendation.service.PreDiaKnowledgeEngine;
+
+/**
+ * 本体余弦相似度算法的诊断引擎，该引擎实现诊断引擎接口，实现方法为Jena本体和余弦相似度方式
+ * @author FAN
+ */
 @Service
 public class OntCosinDiagnoseEngine implements DiagnoseKnowledgeEngine{
 
@@ -43,6 +49,9 @@ public class OntCosinDiagnoseEngine implements DiagnoseKnowledgeEngine{
 		this.preDiaEngine = preDiaEngine;
 	}
 	
+	/**
+	 * 根据患病模型，计算患病指数
+	 */
 	@Override
 	public Patient defineDiseaseIndex(Patient patient) {
 		if(patient==null){
@@ -89,6 +98,12 @@ public class OntCosinDiagnoseEngine implements DiagnoseKnowledgeEngine{
 		}
 		return patient;
 	}
+	/**
+	 * 对一个疾病计算对应的病人患病指数！
+	 * @param patient 患病模型
+	 * @param disease 疾病
+	 * @return 患病指数
+	 */
 	private Double consinIndexEvaluate(Patient patient,Disease disease){
 		//复用预诊断接口，求出相关概念集，计算各个概念集的余弦相似度，其实可以不用接口，用到的疾病相关记录，可以使用之前的，从容器上下文中获取，这里可以优化！
 		Float S=new CosinSimTool(constructStrArray(preDiaEngine.getRelativeSymptomByDisease(disease)), constructStrArray(patient.getHasSymptoms())).sim().floatValue();
@@ -106,6 +121,11 @@ public class OntCosinDiagnoseEngine implements DiagnoseKnowledgeEngine{
 		//System.out.println("未转化的的余弦相似度："+sim);
 		return sim;
 	}
+	/**
+	 * 把领域对象分解为可以计算的字符串集，供给余弦计算公式使用
+	 * @param resourse 领域对象
+	 * @return
+	 */
 	private ArrayList<String>  constructStrArray(Set<? extends Resource> resourse){
 		ArrayList<String> array=new ArrayList<String>();
 		for(Resource re:resourse){
@@ -140,22 +160,6 @@ public class OntCosinDiagnoseEngine implements DiagnoseKnowledgeEngine{
 		return diseaseSet;
 	}
 	
-//	/**
-//	 * 抽取共同部分代码，判断某个本体是否为superURI的子类
-//	 * @param superRdf
-//	 * @param ontClass
-//	 * @return
-//	 */
-//	private boolean isSuperClass(String superURI,OntClass ontClass){
-//		boolean finded=false;
-//		ExtendedIterator<OntClass> iterator=ontClass.listSuperClasses(false);
-//		while(iterator.hasNext()){
-//			OntClass superClass=(OntClass) iterator.next();
-//			if(superURI.equals(superClass.getURI())){
-//				finded=true;
-//			}
-//		}
-//		return finded;
-//	}
+
 
 }

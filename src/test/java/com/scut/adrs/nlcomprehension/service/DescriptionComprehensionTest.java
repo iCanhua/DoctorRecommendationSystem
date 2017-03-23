@@ -3,6 +3,8 @@ package com.scut.adrs.nlcomprehension.service;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.ansj.domain.Result;
 import org.junit.Before;
@@ -11,8 +13,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.scut.adrs.domain.Resource;
-import com.scut.adrs.nlcomprehension.DescriptionComprehension;
-import com.scut.adrs.nlcomprehension.InterConceptQuestion;
 import com.scut.adrs.nlcomprehension.service.imp.AnsjDescriptionParser;
 import com.scut.adrs.nlcomprehension.service.imp.ConceptMatch;
 
@@ -26,11 +26,11 @@ public class DescriptionComprehensionTest {
 	public void test() {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/spring*.xml");
 		AnsjDescriptionParser parser = ctx.getBean(AnsjDescriptionParser.class);
-		String description = "心有点绞痛，黑色的大便";
+		String description = "心脏有点绞痛，黑色的大便";
 		Result result = parser.parse(description).recognition(parser.getStopRecongnition());
 		System.out.println("分词结果：" + result);
 		ConceptMatch matcher = ctx.getBean(ConceptMatch.class);
-		ArrayList<Resource> reList = matcher.resourseMatch(result);
+		Set<Resource> reList = matcher.accuratelyMatch(description, result);
 		for (Resource re : reList) {
 			System.out.println(re.getIRI() + "该Resource类型为：" + re.getDomainType());
 		}
