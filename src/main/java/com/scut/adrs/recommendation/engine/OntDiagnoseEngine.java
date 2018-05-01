@@ -9,6 +9,8 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.Restriction;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.scut.adrs.domain.BodySigns;
@@ -25,7 +27,7 @@ import com.scut.adrs.recommendation.exception.UnExistURIException;
  * @author FAN
  *
  */
-@Service
+@Component
 public class OntDiagnoseEngine implements DiagnoseKnowledgeEngine{
 	Float s=0F,b=0F,p=0F,d=0F;
 	@Autowired

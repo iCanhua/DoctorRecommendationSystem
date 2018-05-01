@@ -232,11 +232,7 @@ public class RecommendController {
 	}
 
 	/**
-	 * 
-	 * @param symptoms
-	 * @param bodySigns
-	 * @param pathogeny
-	 * @param medicalHistory
+	 *
 	 * @param model
 	 * @param session
 	 * @return

@@ -4,11 +4,11 @@ import org.ansj.library.DicLibrary;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.util.iterator.ExtendedIterator;
-import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DicInsertUtil {
-	private static Logger logger = Logger.getLogger(DicInsertUtil.class);
+//	private static Logger logger = Logger.getLogger(DicInsertUtil.class);
 	private static String NS = "http://www.semanticweb.org/fan/ontologies/2016/7/untitled-ontology-26#";
 	@Autowired
 	OntModel myOntModel;
@@ -34,30 +34,30 @@ public class DicInsertUtil {
 			String name = symptom.getURI().split("#")[1];
 			DicLibrary.insert(DicLibrary.DEFAULT, name, "n", 1000);
 		}
-		logger.warn("症状词条录入完毕");
+//		logger.warn("症状词条录入完毕");
 		while (listRootBodySignsSubClasses.hasNext()) {
 			OntClass bodySigns = listRootBodySignsSubClasses.next();
 			String name = bodySigns.getURI().split("#")[1];
 			DicLibrary.insert(DicLibrary.DEFAULT, name, "n", 1000);
 		}
-		logger.warn("体征词条录入完毕");
+//		logger.warn("体征词条录入完毕");
 		while (listRootPathogenySubClasses.hasNext()) {
 			OntClass pathogeny = listRootPathogenySubClasses.next();
 			String name = pathogeny.getURI().split("#")[1];
 			DicLibrary.insert(DicLibrary.DEFAULT, name, "n", 1000);
 		}
-		logger.warn("病因词条录入完毕");
+//		logger.warn("病因词条录入完毕");
 		while (listRootDiseaseSubClasses.hasNext()) {
 			OntClass disease = listRootDiseaseSubClasses.next();
 			String name = disease.getURI().split("#")[1];
 			DicLibrary.insert(DicLibrary.DEFAULT, name, "n", 1000);
 		}
-		logger.warn("疾病词条录入完毕");
+//		logger.warn("疾病词条录入完毕");
 		while (listRootAnatomical.hasNext()) {
 			OntClass anatomical = listRootAnatomical.next();
 			String name = anatomical.getURI().split("#")[1];
 			DicLibrary.insert(DicLibrary.DEFAULT, name, "n", 1000);
 		}
-		logger.warn("解剖结构词条录入完毕");
+//		logger.warn("解剖结构词条录入完毕");
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.github.andrewoma.dexx.collection.ArrayList;
@@ -17,7 +18,7 @@ import com.scut.adrs.domain.Patient;
 import com.scut.adrs.recommendation.diagnose.Diagnose;
 import com.scut.adrs.recommendation.diagnose.DiagnoseKnowledgeEngine;
 import com.scut.adrs.recommendation.exception.DiagnoseException;
-@Service
+@Component
 public class DiagnosisImp implements Diagnose{
 	//consinEngine
 	@Autowired

@@ -11,6 +11,7 @@ import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.Restriction;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.scut.adrs.domain.BodySigns;
@@ -28,7 +29,7 @@ import com.scut.adrs.recommendation.exception.UnExistURIException;
  * 本体余弦相似度算法的诊断引擎，该引擎实现诊断引擎接口，实现方法为Jena本体和余弦相似度方式
  * @author FAN
  */
-@Service
+@Component
 public class OntCosinDiagnoseEngine implements DiagnoseKnowledgeEngine{
 
 	@Autowired

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.scut.adrs.domain.BodySigns;
@@ -22,7 +23,7 @@ import com.scut.adrs.recommendation.exception.UnExistURIException;
  * @author FAN
  *
  */
-@Service
+@Component
 public class PreDiagnosisImp implements PreDiagnosis {
 	/*
 	 * 预诊断算法引擎接口，该引擎可以根据不同本体库替换，只需实现该接口可保证整个预诊断业务正常进行

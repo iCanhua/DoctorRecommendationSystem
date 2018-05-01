@@ -3,6 +3,7 @@ package com.scut.adrs.util;
 import org.apache.jena.ontology.*;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,7 +20,9 @@ public class ontDaoUtils {
 	public static void setFilepath(String filepath) {
 		ontDaoUtils.filepath = filepath;
 	}
-    public static  OntModel getModel(){
+
+    @Bean
+	public static  OntModel getModel(){
         OntModel  base= ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
         base.read(filepath);
         OntDocumentManager documentManager=base.getDocumentManager();
